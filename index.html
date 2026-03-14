@@ -19,6 +19,13 @@
             --rose: #C28A8A;
             --warm: #C9A87A;
 
+            /* Fun accent colors (for decorative elements only) */
+            --mustard: #E3A832;
+            --sage: #7B9B68;
+            --sky: #6BA4C9;
+            --pink: #D98BA5;
+            --lavender: #9B7EC8;
+
             --font-hand: 'Gaegu', cursive;
             --font-serif: 'Instrument Serif', serif;
             --font-body: 'DM Sans', sans-serif;
@@ -516,7 +523,7 @@
             left: 18px; top: 0; bottom: 0;
             width: 3px;
             border-radius: 3px;
-            background: linear-gradient(to bottom, var(--coral), var(--rose), var(--warm));
+            background: linear-gradient(to bottom, var(--coral), var(--pink), var(--mustard), var(--sage));
             opacity: 0.25;
         }
 
@@ -594,12 +601,12 @@
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
 
-        .polaroid:nth-child(1) { transform: rotate(-3deg); }
-        .polaroid:nth-child(2) { transform: rotate(1.5deg); border-color: var(--rose); }
-        .polaroid:nth-child(3) { transform: rotate(-1deg); border-color: var(--warm); }
-        .polaroid:nth-child(4) { transform: rotate(2.5deg); border-color: var(--rose); }
-        .polaroid:nth-child(5) { transform: rotate(-2deg); border-color: var(--warm); }
-        .polaroid:nth-child(6) { transform: rotate(1deg); }
+        .polaroid:nth-child(1) { transform: rotate(-3deg); border-color: var(--coral); }
+        .polaroid:nth-child(2) { transform: rotate(1.5deg); border-color: var(--mustard); }
+        .polaroid:nth-child(3) { transform: rotate(-1deg); border-color: var(--sage); }
+        .polaroid:nth-child(4) { transform: rotate(2.5deg); border-color: var(--sky); }
+        .polaroid:nth-child(5) { transform: rotate(-2deg); border-color: var(--pink); }
+        .polaroid:nth-child(6) { transform: rotate(1deg); border-color: var(--lavender); }
 
         .polaroid:hover {
             transform: rotate(0deg) scale(1.06) translateY(-6px) !important;
@@ -607,8 +614,12 @@
             z-index: 10;
         }
 
-        .polaroid:nth-child(2):hover, .polaroid:nth-child(4):hover { box-shadow: 6px 6px 0 var(--rose); }
-        .polaroid:nth-child(3):hover, .polaroid:nth-child(5):hover { box-shadow: 6px 6px 0 var(--warm); }
+        .polaroid:nth-child(1):hover { box-shadow: 6px 6px 0 var(--coral); }
+        .polaroid:nth-child(2):hover { box-shadow: 6px 6px 0 var(--mustard); }
+        .polaroid:nth-child(3):hover { box-shadow: 6px 6px 0 var(--sage); }
+        .polaroid:nth-child(4):hover { box-shadow: 6px 6px 0 var(--sky); }
+        .polaroid:nth-child(5):hover { box-shadow: 6px 6px 0 var(--pink); }
+        .polaroid:nth-child(6):hover { box-shadow: 6px 6px 0 var(--lavender); }
 
         .pol-img {
             width: 100%;
@@ -629,8 +640,12 @@
             stroke: var(--coral);
         }
 
-        .polaroid:nth-child(2) .pol-img svg, .polaroid:nth-child(4) .pol-img svg { stroke: var(--rose); }
-        .polaroid:nth-child(3) .pol-img svg, .polaroid:nth-child(5) .pol-img svg { stroke: var(--warm); }
+        .polaroid:nth-child(1) .pol-img svg { stroke: var(--coral); }
+        .polaroid:nth-child(2) .pol-img svg { stroke: var(--mustard); }
+        .polaroid:nth-child(3) .pol-img svg { stroke: var(--sage); }
+        .polaroid:nth-child(4) .pol-img svg { stroke: var(--sky); }
+        .polaroid:nth-child(5) .pol-img svg { stroke: var(--pink); }
+        .polaroid:nth-child(6) .pol-img svg { stroke: var(--lavender); }
 
         .pol-label {
             font-family: var(--font-hand);
@@ -716,9 +731,16 @@
             border-radius: 40% 50% 40% 50% / 50% 40% 50% 40%;
         }
 
-        .love-blob:nth-child(3n+1) { --accent: var(--coral); }
-        .love-blob:nth-child(3n+2) { --accent: var(--rose); }
-        .love-blob:nth-child(3n)   { --accent: var(--warm); }
+        .love-blob:nth-child(1)  { --accent: var(--coral); }
+        .love-blob:nth-child(2)  { --accent: var(--mustard); }
+        .love-blob:nth-child(3)  { --accent: var(--sage); }
+        .love-blob:nth-child(4)  { --accent: var(--sky); }
+        .love-blob:nth-child(5)  { --accent: var(--pink); }
+        .love-blob:nth-child(6)  { --accent: var(--lavender); }
+        .love-blob:nth-child(7)  { --accent: var(--mustard); }
+        .love-blob:nth-child(8)  { --accent: var(--coral); }
+        .love-blob:nth-child(9)  { --accent: var(--sage); }
+        .love-blob:nth-child(10) { --accent: var(--pink); }
 
         .love-blob:hover {
             border-color: var(--accent);
@@ -1063,12 +1085,12 @@
     <div id="cursor">
         <svg viewBox="0 0 28 28" fill="none">
             <circle cx="14" cy="14" r="3" fill="#C4553F"/>
-            <circle cx="14" cy="7" r="3.5" fill="none" stroke="#C4553F" stroke-width="2"/>
-            <circle cx="19.9" cy="10.5" r="3.5" fill="none" stroke="#C28A8A" stroke-width="2"/>
-            <circle cx="19.9" cy="17.5" r="3.5" fill="none" stroke="#C9A87A" stroke-width="2"/>
-            <circle cx="14" cy="21" r="3.5" fill="none" stroke="#C4553F" stroke-width="2"/>
-            <circle cx="8.1" cy="17.5" r="3.5" fill="none" stroke="#C28A8A" stroke-width="2"/>
-            <circle cx="8.1" cy="10.5" r="3.5" fill="none" stroke="#C9A87A" stroke-width="2"/>
+            <circle cx="14" cy="7" r="3.5" fill="none" stroke="#D98BA5" stroke-width="2"/>
+            <circle cx="19.9" cy="10.5" r="3.5" fill="none" stroke="#E3A832" stroke-width="2"/>
+            <circle cx="19.9" cy="17.5" r="3.5" fill="none" stroke="#7B9B68" stroke-width="2"/>
+            <circle cx="14" cy="21" r="3.5" fill="none" stroke="#6BA4C9" stroke-width="2"/>
+            <circle cx="8.1" cy="17.5" r="3.5" fill="none" stroke="#9B7EC8" stroke-width="2"/>
+            <circle cx="8.1" cy="10.5" r="3.5" fill="none" stroke="#C4553F" stroke-width="2"/>
         </svg>
     </div>
     <div id="trailContainer"></div>
@@ -1109,34 +1131,34 @@
     <section class="hero">
         <div class="hero-deco hero-deco-1">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                <path d="M18 3 L21 14 L32 14 L23 21 L26 32 L18 25 L10 32 L13 21 L4 14 L15 14Z" stroke="#C9A87A" stroke-width="2" fill="none"/>
+                <path d="M18 3 L21 14 L32 14 L23 21 L26 32 L18 25 L10 32 L13 21 L4 14 L15 14Z" stroke="#E3A832" stroke-width="2" fill="none"/>
             </svg>
         </div>
         <div class="hero-deco hero-deco-2">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <circle cx="16" cy="16" r="12" stroke="#C28A8A" stroke-width="2" stroke-dasharray="4 4"/>
+                <circle cx="16" cy="16" r="12" stroke="#D98BA5" stroke-width="2" stroke-dasharray="4 4"/>
             </svg>
         </div>
         <div class="hero-deco hero-deco-3">
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4 Q24 14, 14 24 Q4 14, 14 4Z" stroke="#C28A8A" stroke-width="2" fill="none"/>
+                <path d="M14 4 Q24 14, 14 24 Q4 14, 14 4Z" stroke="#9B7EC8" stroke-width="2" fill="none"/>
             </svg>
         </div>
         <div class="hero-deco hero-deco-4">
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                <circle cx="15" cy="15" r="10" stroke="#C9A87A" stroke-width="2" fill="none"/>
-                <circle cx="15" cy="15" r="4" stroke="#C9A87A" stroke-width="1.5" fill="none"/>
+                <circle cx="15" cy="15" r="10" stroke="#7B9B68" stroke-width="2" fill="none"/>
+                <circle cx="15" cy="15" r="4" stroke="#7B9B68" stroke-width="1.5" fill="none"/>
             </svg>
         </div>
 
         <!-- Flower (clickable!) -->
         <svg class="hero-flower" id="heroFlower" viewBox="0 0 120 160" fill="none">
             <path d="M60 160 C58 130, 55 110, 60 85" stroke="#C4553F" stroke-width="3.5" stroke-linecap="round"/>
-            <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#C9A87A" stroke-width="2.5"/>
-            <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#C9A87A" stroke-width="2.5"/>
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#C28A8A" stroke-width="2.5"/>
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#C4553F" stroke-width="2.5"/>
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#C9A87A" stroke-width="2.5"/>
+            <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+            <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#D98BA5" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#E3A832" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#9B7EC8" stroke-width="2.5"/>
             <circle cx="60" cy="48" r="12" fill="#EBE1D5" stroke="#C4553F" stroke-width="2.5"/>
             <circle cx="55" cy="46" r="2" fill="#C4553F"/>
             <circle cx="65" cy="46" r="2" fill="#C4553F"/>
@@ -1284,10 +1306,10 @@
 
         <div class="letter reveal">
             <svg class="letter-doodle" viewBox="0 0 55 55" fill="none">
-                <path d="M27 48 C17 38, 2 30, 2 19 C2 10, 9 4, 16 4 C20 4, 24 7, 27 11 C30 7, 34 4, 38 4 C45 4, 52 10, 52 19 C52 30, 37 38, 27 48Z" stroke="#C4553F" stroke-width="2.5"/>
+                <path d="M27 48 C17 38, 2 30, 2 19 C2 10, 9 4, 16 4 C20 4, 24 7, 27 11 C30 7, 34 4, 38 4 C45 4, 52 10, 52 19 C52 30, 37 38, 27 48Z" stroke="#D98BA5" stroke-width="2.5"/>
             </svg>
             <svg class="letter-doodle-left" viewBox="0 0 40 40" fill="none">
-                <path d="M20 4 L23 15 L34 15 L25 22 L28 33 L20 26 L12 33 L15 22 L6 15 L17 15Z" stroke="#C9A87A" stroke-width="2"/>
+                <path d="M20 4 L23 15 L34 15 L25 22 L28 33 L20 26 L12 33 L15 22 L6 15 L17 15Z" stroke="#E3A832" stroke-width="2"/>
             </svg>
 
             <div class="letter-greeting">meine liebste greta,</div>
@@ -1399,7 +1421,7 @@
             });
         })();
 
-        const palette = ['#C4553F', '#C28A8A', '#C9A87A'];
+        const palette = ['#C4553F', '#E3A832', '#7B9B68', '#6BA4C9', '#D98BA5', '#9B7EC8'];
 
         /* ==== CURSOR + TRAIL ==== */
         const cur = document.getElementById('cursor');
