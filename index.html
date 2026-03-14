@@ -45,7 +45,7 @@
         ::selection { background: var(--coral); color: var(--beige); }
 
         /* ============================================
-           LOCK SCREEN – Heart Combination Lock
+           LOCK SCREEN – Heart Padlock
            ============================================ */
         .lock-screen {
             position: fixed;
@@ -65,164 +65,176 @@
             pointer-events: none;
         }
 
-        .lock-title {
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-size: 1.8rem;
-            color: var(--coral);
-            margin-bottom: 6px;
-        }
-
         .lock-subtitle {
             font-family: var(--font-hand);
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--rose);
-            margin-bottom: 40px;
+            margin-bottom: 36px;
+            text-align: center;
         }
 
-        /* Heart container */
-        .heart-lock {
+        /* Padlock visual */
+        .padlock {
             position: relative;
-            width: 240px;
-            height: 220px;
-            margin-bottom: 32px;
-        }
-
-        .heart-lock-svg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            filter: drop-shadow(0 4px 12px rgba(196, 85, 63, 0.15));
-        }
-
-        /* Digit wheels container – positioned inside heart */
-        .combo-wheels {
-            position: absolute;
-            top: 52%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             display: flex;
-            gap: 6px;
-            z-index: 2;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 28px;
         }
 
-        .combo-wheel {
-            width: 44px;
-            height: 56px;
-            overflow: hidden;
-            border-radius: 8px;
-            border: 2.5px solid var(--coral);
+        /* Heart-shaped shackle (the top arc) */
+        .padlock-shackle {
+            width: 120px;
+            height: 80px;
+            margin-bottom: -6px;
+            filter: drop-shadow(0 2px 6px rgba(196, 85, 63, 0.12));
+        }
+
+        /* Lock body */
+        .padlock-body {
             background: var(--beige-light);
+            border: 3px solid var(--coral);
+            border-radius: 16px;
+            padding: 24px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 6px 20px rgba(196, 85, 63, 0.1);
             position: relative;
-            touch-action: none;
         }
 
-        .combo-wheel:nth-child(2) { border-color: var(--mustard); }
-        .combo-wheel:nth-child(3) { border-color: var(--pink); }
-        .combo-wheel:nth-child(4) { border-color: var(--sage); }
+        /* Keyhole decoration */
+        .padlock-keyhole {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            background: var(--beige-light);
+            border: 3px solid var(--coral);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* Fade edges */
-        .combo-wheel::before,
-        .combo-wheel::after {
+        .padlock-keyhole::after {
             content: '';
-            position: absolute;
-            left: 0; right: 0;
-            height: 14px;
-            z-index: 3;
-            pointer-events: none;
+            width: 6px;
+            height: 10px;
+            background: var(--coral);
+            border-radius: 2px 2px 4px 4px;
+            margin-top: 2px;
         }
 
-        .combo-wheel::before {
-            top: 0;
-            background: linear-gradient(to bottom, var(--beige-light), transparent);
-        }
-
-        .combo-wheel::after {
-            bottom: 0;
-            background: linear-gradient(to top, var(--beige-light), transparent);
-        }
-
-        .combo-strip {
+        /* Digit roller row */
+        .roller-row {
             display: flex;
-            flex-direction: column;
-            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            gap: 8px;
         }
 
-        .combo-digit {
-            width: 44px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            font-style: italic;
-            color: var(--coral);
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        .combo-wheel:nth-child(2) .combo-digit { color: var(--mustard); }
-        .combo-wheel:nth-child(3) .combo-digit { color: var(--pink); }
-        .combo-wheel:nth-child(4) .combo-digit { color: var(--sage); }
-
-        /* Arrow buttons */
-        .combo-arrows {
-            position: absolute;
-            left: 0; right: 0;
+        /* Single digit roller */
+        .roller {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            z-index: 4;
-            pointer-events: none;
+            gap: 4px;
         }
 
-        .combo-arrow {
-            pointer-events: auto;
-            width: 100%;
-            height: 18px;
+        .roller-btn {
+            width: 52px;
+            height: 28px;
+            border: none;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s ease;
+            border-radius: 6px;
+            transition: background 0.15s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .combo-wheel:hover .combo-arrow,
-        .combo-arrow:active {
-            opacity: 0.5;
+        .roller-btn:active {
+            background: rgba(196, 85, 63, 0.1);
         }
 
-        .combo-arrow svg {
-            width: 14px;
-            height: 14px;
-            stroke: var(--coral);
+        .roller-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            fill: none;
         }
+
+        .roller:nth-child(1) .roller-btn svg { stroke: var(--coral); }
+        .roller:nth-child(2) .roller-btn svg { stroke: var(--mustard); }
+        .roller:nth-child(3) .roller-btn svg { stroke: var(--pink); }
+        .roller:nth-child(4) .roller-btn svg { stroke: var(--sage); }
+
+        @media (pointer: fine) {
+            .roller-btn { cursor: none; }
+            .roller-btn:hover { background: rgba(196, 85, 63, 0.06); }
+        }
+
+        .roller-display {
+            width: 52px;
+            height: 58px;
+            border-radius: 10px;
+            border: 2.5px solid var(--coral);
+            background: var(--beige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 2rem;
+            color: var(--coral);
+            user-select: none;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .roller-display.bump-up {
+            animation: bumpUp 0.2s ease;
+        }
+
+        .roller-display.bump-down {
+            animation: bumpDown 0.2s ease;
+        }
+
+        @keyframes bumpUp {
+            0% { transform: translateY(0); }
+            40% { transform: translateY(-4px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes bumpDown {
+            0% { transform: translateY(0); }
+            40% { transform: translateY(4px); }
+            100% { transform: translateY(0); }
+        }
+
+        .roller:nth-child(2) .roller-display { border-color: var(--mustard); color: var(--mustard); }
+        .roller:nth-child(3) .roller-display { border-color: var(--pink); color: var(--pink); }
+        .roller:nth-child(4) .roller-display { border-color: var(--sage); color: var(--sage); }
 
         /* Unlock button */
         .lock-btn {
             font-family: var(--font-hand);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--beige);
             background: var(--coral);
             border: none;
             border-radius: 30px;
-            padding: 12px 40px;
+            padding: 12px 44px;
             letter-spacing: 1px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .lock-btn:active {
-            transform: scale(0.96);
-        }
+        .lock-btn:active { transform: scale(0.96); }
 
         @media (pointer: fine) {
             .lock-btn { cursor: none; }
@@ -233,16 +245,16 @@
         }
 
         /* Shake */
-        .heart-lock.shake {
-            animation: heartShake 0.5s ease;
+        .padlock.shake {
+            animation: padShake 0.5s ease;
         }
 
-        @keyframes heartShake {
+        @keyframes padShake {
             0%, 100% { transform: rotate(0deg); }
-            15% { transform: rotate(-5deg); }
-            30% { transform: rotate(4deg); }
-            45% { transform: rotate(-3deg); }
-            60% { transform: rotate(2deg); }
+            15% { transform: rotate(-6deg); }
+            30% { transform: rotate(5deg); }
+            45% { transform: rotate(-4deg); }
+            60% { transform: rotate(3deg); }
             75% { transform: rotate(-1deg); }
         }
 
@@ -272,7 +284,7 @@
 
         /* ---- CUSTOM CURSOR ---- */
         @media (pointer: fine) {
-            body, a, button, .polaroid, .love-blob, .signature, .music-btn, .lock-btn, .combo-arrow { cursor: none; }
+            body, a, button, .polaroid, .love-blob, .signature, .music-btn, .lock-btn, .roller-btn { cursor: none; }
         }
 
         #cursor {
@@ -1110,64 +1122,39 @@
          LOCK SCREEN
          ============================================ -->
     <div class="lock-screen" id="lockScreen">
-        <div class="lock-title">für greta</div>
-        <div class="lock-subtitle">stelle den code ein</div>
+        <div class="lock-subtitle">stelle den richtigen code ein</div>
 
-        <div class="heart-lock" id="heartLock">
-            <!-- Heart outline SVG -->
-            <svg class="heart-lock-svg" viewBox="0 0 240 220" fill="none">
-                <path d="M120 200 C60 160, 8 120, 8 75 C8 40, 32 15, 65 15 C85 15, 103 27, 120 48 C137 27, 155 15, 175 15 C208 15, 232 40, 232 75 C232 120, 180 160, 120 200Z"
-                      stroke="#C4553F" stroke-width="3" fill="var(--beige-light)" fill-opacity="0.5"/>
-                <!-- Small keyhole at top -->
-                <circle cx="120" cy="60" r="6" stroke="#C4553F" stroke-width="2" fill="none"/>
-                <line x1="120" y1="66" x2="120" y2="78" stroke="#C4553F" stroke-width="2"/>
+        <div class="padlock" id="padlock">
+            <!-- Heart shackle -->
+            <svg class="padlock-shackle" viewBox="0 0 120 80" fill="none">
+                <path d="M20 78 L20 40 C20 10, 60 -12, 60 20 C60 -12, 100 10, 100 40 L100 78"
+                      stroke="#C4553F" stroke-width="6" stroke-linecap="round" fill="none"/>
             </svg>
 
-            <!-- 4 digit scroll wheels -->
-            <div class="combo-wheels" id="comboWheels">
-                <div class="combo-wheel" data-idx="0">
-                    <div class="combo-arrows">
-                        <div class="combo-arrow arrow-up" data-dir="up">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9l4-4 4 4"/></svg>
-                        </div>
-                        <div class="combo-arrow arrow-down" data-dir="down">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                        </div>
+            <div class="padlock-body">
+                <div class="padlock-keyhole"></div>
+
+                <div class="roller-row" id="rollerRow">
+                    <div class="roller">
+                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <div class="roller-display">0</div>
+                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
-                    <div class="combo-strip"></div>
-                </div>
-                <div class="combo-wheel" data-idx="1">
-                    <div class="combo-arrows">
-                        <div class="combo-arrow arrow-up" data-dir="up">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9l4-4 4 4"/></svg>
-                        </div>
-                        <div class="combo-arrow arrow-down" data-dir="down">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                        </div>
+                    <div class="roller">
+                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <div class="roller-display">0</div>
+                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
-                    <div class="combo-strip"></div>
-                </div>
-                <div class="combo-wheel" data-idx="2">
-                    <div class="combo-arrows">
-                        <div class="combo-arrow arrow-up" data-dir="up">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9l4-4 4 4"/></svg>
-                        </div>
-                        <div class="combo-arrow arrow-down" data-dir="down">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                        </div>
+                    <div class="roller">
+                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <div class="roller-display">0</div>
+                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
-                    <div class="combo-strip"></div>
-                </div>
-                <div class="combo-wheel" data-idx="3">
-                    <div class="combo-arrows">
-                        <div class="combo-arrow arrow-up" data-dir="up">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9l4-4 4 4"/></svg>
-                        </div>
-                        <div class="combo-arrow arrow-down" data-dir="down">
-                            <svg viewBox="0 0 14 14" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                        </div>
+                    <div class="roller">
+                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <div class="roller-display">0</div>
+                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
-                    <div class="combo-strip"></div>
                 </div>
             </div>
         </div>
@@ -1176,12 +1163,7 @@
         <div class="lock-hint" id="lockHint">Falsches Passwort! Hinweis: Unser Jahrestag</div>
     </div>
 
-    <!-- App content wrapper -->
-    <div class="app-content locked" id="appContent">
-
-    <div class="confetti-wrap" id="confetti"></div>
-
-    <!-- Custom cursor (small flower, warm tones) -->
+    <!-- Custom cursor (outside app-content so it works on lock screen too) -->
     <div id="cursor">
         <svg viewBox="0 0 28 28" fill="none">
             <circle cx="14" cy="14" r="3" fill="#C4553F"/>
@@ -1193,7 +1175,11 @@
             <circle cx="8.1" cy="10.5" r="3.5" fill="none" stroke="#C4553F" stroke-width="2"/>
         </svg>
     </div>
-    <div id="trailContainer"></div>
+
+    <!-- App content wrapper -->
+    <div class="app-content locked" id="appContent">
+
+    <div class="confetti-wrap" id="confetti"></div>
 
     <!-- Scroll progress heart -->
     <div class="scroll-heart" id="scrollHeart">
@@ -1443,100 +1429,112 @@
         'use strict';
 
         /* ============================================
-           LOCK SCREEN – Heart Combination Lock
+           LOCK SCREEN – Heart Padlock
            ============================================ */
         (function initLockScreen() {
             const CODE = [2, 5, 0, 4];
             const lockScreen = document.getElementById('lockScreen');
             const appContent = document.getElementById('appContent');
-            const heartLock = document.getElementById('heartLock');
+            const padlock = document.getElementById('padlock');
             const hint = document.getElementById('lockHint');
             const lockBtn = document.getElementById('lockBtn');
-            const wheels = document.querySelectorAll('.combo-wheel');
-            const DIGIT_H = 56; // matches .combo-digit height
+            const rollers = document.querySelectorAll('.roller');
             let locked = true;
-
-            // Current value per wheel
+            let focusedRoller = 0; // which roller has keyboard focus
             const values = [0, 0, 0, 0];
 
-            // Build digit strips (0-9 repeated for seamless wrapping)
-            wheels.forEach((wheel, wi) => {
-                const strip = wheel.querySelector('.combo-strip');
-                // Prepend 9 at top for wrapping, then 0-9, then 0 at bottom
-                for (let d = 9; d <= 9; d++) {
-                    const div = document.createElement('div');
-                    div.className = 'combo-digit';
-                    div.textContent = d;
-                    strip.appendChild(div);
-                }
-                for (let d = 0; d <= 9; d++) {
-                    const div = document.createElement('div');
-                    div.className = 'combo-digit';
-                    div.textContent = d;
-                    strip.appendChild(div);
-                }
-                for (let d = 0; d <= 0; d++) {
-                    const div = document.createElement('div');
-                    div.className = 'combo-digit';
-                    div.textContent = d;
-                    strip.appendChild(div);
-                }
-                // Start showing 0 (offset by 1 because of prepended 9)
-                strip.style.transform = `translateY(${-1 * DIGIT_H}px)`;
+            function updateDisplay(idx) {
+                const display = rollers[idx].querySelector('.roller-display');
+                display.textContent = values[idx];
+            }
 
-                // Arrow click handlers
-                wheel.querySelectorAll('.combo-arrow').forEach(arrow => {
-                    arrow.addEventListener('click', e => {
-                        e.stopPropagation();
-                        if (!locked) return;
-                        const dir = arrow.dataset.dir;
-                        if (dir === 'up') {
-                            values[wi] = (values[wi] + 1) % 10;
-                        } else {
-                            values[wi] = (values[wi] + 9) % 10;
-                        }
-                        strip.style.transform = `translateY(${-(values[wi] + 1) * DIGIT_H}px)`;
-                    });
-                });
+            function bumpAnim(idx, dir) {
+                const display = rollers[idx].querySelector('.roller-display');
+                display.classList.remove('bump-up', 'bump-down');
+                void display.offsetHeight;
+                display.classList.add(dir === 1 ? 'bump-up' : 'bump-down');
+            }
 
-                // Scroll / swipe support
-                let startY = 0, dragging = false;
-                wheel.addEventListener('pointerdown', e => {
-                    if (!locked) return;
-                    startY = e.clientY;
-                    dragging = true;
-                    wheel.setPointerCapture(e.pointerId);
-                });
+            function increment(idx) {
+                if (!locked) return;
+                values[idx] = (values[idx] + 1) % 10;
+                updateDisplay(idx);
+                bumpAnim(idx, 1);
+            }
 
-                wheel.addEventListener('pointermove', e => {
-                    if (!dragging) return;
-                    const diff = startY - e.clientY;
-                    if (Math.abs(diff) > 20) {
-                        if (diff > 0) {
-                            values[wi] = (values[wi] + 1) % 10;
-                        } else {
-                            values[wi] = (values[wi] + 9) % 10;
-                        }
-                        strip.style.transform = `translateY(${-(values[wi] + 1) * DIGIT_H}px)`;
-                        startY = e.clientY;
-                    }
-                });
+            function decrement(idx) {
+                if (!locked) return;
+                values[idx] = (values[idx] + 9) % 10;
+                updateDisplay(idx);
+                bumpAnim(idx, -1);
+            }
 
-                wheel.addEventListener('pointerup', () => { dragging = false; });
-                wheel.addEventListener('pointercancel', () => { dragging = false; });
+            // Button clicks
+            rollers.forEach((roller, i) => {
+                roller.querySelector('.roller-up').addEventListener('click', () => { increment(i); focusedRoller = i; });
+                roller.querySelector('.roller-down').addEventListener('click', () => { decrement(i); focusedRoller = i; });
 
-                // Mouse wheel support
-                wheel.addEventListener('wheel', e => {
+                // Scroll wheel on each roller
+                roller.addEventListener('wheel', e => {
                     if (!locked) return;
                     e.preventDefault();
-                    if (e.deltaY > 0) {
-                        values[wi] = (values[wi] + 1) % 10;
-                    } else {
-                        values[wi] = (values[wi] + 9) % 10;
-                    }
-                    strip.style.transform = `translateY(${-(values[wi] + 1) * DIGIT_H}px)`;
+                    focusedRoller = i;
+                    if (e.deltaY > 0) decrement(i);
+                    else increment(i);
                 }, { passive: false });
             });
+
+            // Keyboard: arrows to change digits, left/right to switch roller, enter to submit
+            document.addEventListener('keydown', e => {
+                if (!locked) return;
+                switch (e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        increment(focusedRoller);
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        decrement(focusedRoller);
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        focusedRoller = Math.max(0, focusedRoller - 1);
+                        highlightRoller();
+                        break;
+                    case 'ArrowRight':
+                    case 'Tab':
+                        e.preventDefault();
+                        focusedRoller = Math.min(3, focusedRoller + 1);
+                        highlightRoller();
+                        break;
+                    case 'Enter':
+                        lockBtn.click();
+                        break;
+                    default:
+                        // Direct digit input
+                        if (e.key >= '0' && e.key <= '9') {
+                            values[focusedRoller] = parseInt(e.key);
+                            updateDisplay(focusedRoller);
+                            bumpAnim(focusedRoller, 1);
+                            focusedRoller = Math.min(3, focusedRoller + 1);
+                            highlightRoller();
+                        }
+                        if (e.key === 'Backspace') {
+                            values[focusedRoller] = 0;
+                            updateDisplay(focusedRoller);
+                            focusedRoller = Math.max(0, focusedRoller - 1);
+                            highlightRoller();
+                        }
+                }
+            });
+
+            function highlightRoller() {
+                rollers.forEach((r, i) => {
+                    r.querySelector('.roller-display').style.boxShadow =
+                        i === focusedRoller ? '0 0 0 3px rgba(196, 85, 63, 0.25)' : 'none';
+                });
+            }
+            highlightRoller();
 
             // Try unlock
             lockBtn.addEventListener('click', () => {
@@ -1549,15 +1547,9 @@
                     setTimeout(() => { lockScreen.remove(); launchConfetti(); }, 800);
                 } else {
                     hint.classList.add('visible');
-                    heartLock.classList.add('shake');
-                    setTimeout(() => heartLock.classList.remove('shake'), 600);
+                    padlock.classList.add('shake');
+                    setTimeout(() => padlock.classList.remove('shake'), 600);
                 }
-            });
-
-            // Enter key
-            document.addEventListener('keydown', e => {
-                if (!locked) return;
-                if (e.key === 'Enter') lockBtn.click();
             });
         })();
 
@@ -1600,11 +1592,11 @@
             animateTrail();
 
             document.addEventListener('mouseover', e => {
-                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower, .lock-btn, .combo-arrow'))
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower, .lock-btn, .roller-btn'))
                     cur.classList.add('hover');
             });
             document.addEventListener('mouseout', e => {
-                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower, .lock-btn, .combo-arrow'))
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower, .lock-btn, .roller-btn'))
                     cur.classList.remove('hover');
             });
         } else {
