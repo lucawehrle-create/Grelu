@@ -3,225 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Für Greta</title>
+    <title>für greta</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --lilac-100: #F5F0FA;
-            --lilac-200: #EDE0FF;
-            --lilac-300: #D4BEF0;
-            --lilac-400: #C4A8E0;
-            --lilac-500: #9B7EC8;
-            --lilac-600: #7B5EA7;
-            --lilac-700: #5A3D7A;
-            --cream: #FDFBF7;
-            --cream-warm: #F8F3EB;
-            --gold: #C9A96E;
-            --gold-soft: #D4BC8A;
-            --gold-muted: #BFA76F;
-            --text: #3D2B4A;
-            --text-secondary: #6B5A7D;
-            --text-muted: #9B8AAD;
+            --beige: #E8DCD0;
+            --beige-light: #F0E6DC;
+            --beige-dark: #D9CBBE;
+            --coral: #D4553A;
+            --coral-light: #E07860;
+            --coral-soft: rgba(212, 85, 58, 0.08);
+            --coral-muted: rgba(212, 85, 58, 0.5);
+            --text: #D4553A;
+            --text-light: rgba(212, 85, 58, 0.6);
 
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Cormorant Garamond', serif;
+            --font-hand: 'Gaegu', cursive;
+            --font-serif: 'Instrument Serif', serif;
+            --font-body: 'DM Sans', sans-serif;
         }
 
         *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
             font-family: var(--font-body);
-            font-size: 19px;
-            font-weight: 400;
-            color: var(--text);
-            background: var(--cream);
+            background: var(--beige);
+            color: var(--coral);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Custom cursor */
-        @media (pointer: fine) {
-            body { cursor: none; }
-            a, button, .polaroid, .love-element, .letter-signature, .music-trigger {
-                cursor: none;
-            }
+        ::selection {
+            background: var(--coral);
+            color: var(--beige);
         }
 
-        #customCursor {
+        /* ---- CUSTOM CURSOR ---- */
+        @media (pointer: fine) {
+            body, a, button, .polaroid, .love-blob, .signature { cursor: none; }
+        }
+
+        #cursor {
             position: fixed;
             pointer-events: none;
             z-index: 99999;
+        }
+
+        #cursor svg {
+            width: 28px;
+            height: 28px;
+            transform: translate(-14px, -14px);
             transition: transform 0.15s ease;
         }
 
-        #customCursor .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--lilac-500);
-            border-radius: 50%;
+        #cursor.hover svg {
+            transform: translate(-14px, -14px) scale(1.4) rotate(15deg);
+        }
+
+        /* ---- DOODLE DECORATIONS ---- */
+        .doodle {
             position: absolute;
-            top: -4px;
-            left: -4px;
-        }
-
-        #customCursor .cursor-ring {
-            width: 36px;
-            height: 36px;
-            border: 1.5px solid var(--lilac-400);
-            border-radius: 50%;
-            position: absolute;
-            top: -18px;
-            left: -18px;
-            transition: all 0.2s ease;
-            opacity: 0.5;
-        }
-
-        #customCursor.hovering .cursor-ring {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: -25px;
-            border-color: var(--gold);
-            opacity: 0.8;
-        }
-
-        /* ---- Background ---- */
-        .bg-gradient {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 15%, rgba(212, 190, 240, 0.25) 0%, transparent 70%),
-                radial-gradient(ellipse 60% 80% at 85% 80%, rgba(212, 190, 240, 0.2) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 50% at 50% 50%, rgba(248, 243, 235, 0.5) 0%, transparent 80%),
-                var(--cream);
-        }
-
-        /* ---- Floating particles (canvas) ---- */
-        #particleCanvas {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
             pointer-events: none;
+            color: var(--coral);
+            opacity: 0.12;
         }
 
-        /* ---- Confetti ---- */
-        .confetti-container {
+        /* ---- CONFETTI ---- */
+        .confetti-wrap {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 9999;
         }
 
-        .confetti-piece {
+        .confetti-dot {
             position: absolute;
-            width: 8px;
-            height: 8px;
             border-radius: 50%;
+            background: var(--coral);
             top: -10px;
             opacity: 0;
-            animation: confettiFall linear forwards;
+            animation: confDrop linear forwards;
         }
 
-        .confetti-piece.star {
-            border-radius: 0;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        @keyframes confDrop {
+            0% { opacity: 0.9; transform: translateY(0) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translateY(110vh) rotate(600deg) scale(0.4); }
         }
 
-        .confetti-piece.heart {
-            border-radius: 0;
-            background: none !important;
-        }
-
-        .confetti-piece.heart::before {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: inherit;
-            background: var(--lilac-400);
-            border-radius: 50% 50% 0 0;
-            top: -4px;
-            left: 0;
-            transform: rotate(-45deg);
-            transform-origin: bottom right;
-        }
-
-        .confetti-piece.heart::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--lilac-400);
-            border-radius: 50% 50% 0 0;
-            top: -4px;
-            left: 4px;
-            transform: rotate(45deg);
-            transform-origin: bottom left;
-        }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* ---- Section base ---- */
+        /* ---- SECTIONS ---- */
         section {
             padding: 100px 24px;
-            max-width: 880px;
+            max-width: 820px;
             margin: 0 auto;
+            position: relative;
         }
 
         .section-label {
-            font-family: var(--font-body);
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gold-muted);
+            font-family: var(--font-hand);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: lowercase;
+            letter-spacing: 2px;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
+            opacity: 0.5;
         }
 
         .section-heading {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 500;
-            color: var(--lilac-600);
-            text-align: center;
-            margin-bottom: 60px;
-            line-height: 1.2;
-        }
-
-        .section-heading em {
+            font-family: var(--font-serif);
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 400;
             font-style: italic;
-            color: var(--lilac-500);
+            text-align: center;
+            margin-bottom: 16px;
+            line-height: 1.15;
         }
 
-        .divider {
-            width: 40px;
-            height: 1px;
-            background: var(--gold-soft);
-            margin: 0 auto 60px;
+        .squiggle {
+            display: block;
+            margin: 0 auto 50px;
+            width: 80px;
+            height: 12px;
         }
 
-        /* ---- Scroll reveal ---- */
+        /* ---- SCROLL REVEAL ---- */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
-
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
@@ -238,66 +155,71 @@
             justify-content: center;
             text-align: center;
             position: relative;
+            padding: 40px 24px;
+        }
+
+        .hero-flower {
+            width: 120px;
+            height: auto;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
         }
 
         .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 12vw, 7rem);
+            font-family: var(--font-serif);
+            font-size: clamp(3.5rem, 14vw, 8rem);
             font-weight: 400;
             font-style: italic;
-            color: var(--lilac-600);
-            line-height: 1.1;
-            overflow: hidden;
-        }
-
-        .hero-title .word {
-            display: inline-block;
+            line-height: 1;
             opacity: 0;
-            transform: translateY(100%);
-            animation: wordReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: fadeUp 0.8s ease 0.6s forwards;
         }
 
-        @keyframes wordReveal {
+        .hero-sub {
+            font-family: var(--font-hand);
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 400;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.2s forwards;
+        }
+
+        .hero-doodle-line {
+            width: 100px;
+            height: 3px;
+            margin: 24px auto 0;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-line {
-            width: 60px;
-            height: 1px;
-            background: var(--gold);
-            margin: 32px auto;
-            opacity: 0;
-            animation: fadeIn 1s ease 1.6s forwards;
-        }
-
-        .hero-subtitle {
-            font-family: var(--font-body);
-            font-size: clamp(1.05rem, 2.5vw, 1.35rem);
-            font-weight: 300;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            opacity: 0;
-            animation: fadeIn 1s ease 2s forwards;
         }
 
         .hero-scroll {
             position: absolute;
-            bottom: 40px;
+            bottom: 36px;
+            font-family: var(--font-hand);
+            font-size: 1rem;
             opacity: 0;
-            animation: fadeIn 1s ease 3s forwards;
+            animation: fadeUp 0.8s ease 2s forwards;
         }
 
-        .hero-scroll svg {
-            width: 20px;
-            height: 30px;
-            animation: scrollBounce 2.5s ease-in-out infinite;
+        .hero-scroll span {
+            display: block;
+            animation: bob 2s ease-in-out infinite;
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        @keyframes scrollBounce {
-            0%, 100% { transform: translateY(0); opacity: 0.4; }
-            50% { transform: translateY(8px); opacity: 0.8; }
+        @keyframes bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
         }
 
         /* ============================================
@@ -305,153 +227,138 @@
            ============================================ */
         .timeline {
             position: relative;
-            padding-left: 50px;
+            padding-left: 48px;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 20px;
+            left: 18px;
             top: 0;
             bottom: 0;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, var(--lilac-300), var(--gold-soft), var(--lilac-300), transparent);
+            width: 3px;
+            background: var(--coral);
+            border-radius: 3px;
+            opacity: 0.2;
         }
 
-        .timeline-item {
+        .tl-item {
             position: relative;
-            margin-bottom: 64px;
-            padding: 32px;
-            background: rgba(253, 251, 247, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(212, 190, 240, 0.2);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            margin-bottom: 56px;
+            padding: 28px;
+            background: var(--coral-soft);
+            border: 2.5px solid var(--coral);
+            border-radius: 20px;
+            transition: transform 0.3s ease;
         }
 
-        .timeline-item:hover {
-            transform: translateX(6px);
-            box-shadow: 0 8px 40px rgba(123, 94, 167, 0.08);
+        .tl-item:hover {
+            transform: translateX(6px) rotate(0.3deg);
         }
 
-        .timeline-item::before {
+        .tl-item::before {
             content: '';
             position: absolute;
-            left: -37px;
-            top: 38px;
-            width: 10px;
-            height: 10px;
-            background: var(--gold);
+            left: -39px;
+            top: 32px;
+            width: 14px;
+            height: 14px;
+            background: var(--coral);
             border-radius: 50%;
-            box-shadow: 0 0 0 4px var(--cream), 0 0 0 5px var(--lilac-300);
         }
 
-        .timeline-date {
-            font-family: var(--font-body);
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gold-muted);
+        .tl-date {
+            font-family: var(--font-hand);
+            font-size: 0.95rem;
+            font-weight: 700;
+            opacity: 0.6;
+            margin-bottom: 6px;
+        }
+
+        .tl-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-style: italic;
             margin-bottom: 8px;
         }
 
-        .timeline-title {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 500;
-            color: var(--lilac-700);
-            margin-bottom: 10px;
-        }
-
-        .timeline-text {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
+        .tl-text {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.75;
         }
 
         /* ============================================
            POLAROIDS
            ============================================ */
-        .polaroids-grid {
+        .pol-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            max-width: 720px;
+            gap: 24px;
+            max-width: 660px;
             margin: 0 auto;
         }
 
         .polaroid {
-            background: white;
-            padding: 10px 10px 44px 10px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
-            position: relative;
+            background: var(--beige-light);
+            border: 2.5px solid var(--coral);
+            border-radius: 16px;
+            padding: 10px 10px 40px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
 
-        .polaroid:nth-child(1) { transform: rotate(-2.5deg); }
-        .polaroid:nth-child(2) { transform: rotate(1.2deg); }
+        .polaroid:nth-child(1) { transform: rotate(-3deg); }
+        .polaroid:nth-child(2) { transform: rotate(1.5deg); }
         .polaroid:nth-child(3) { transform: rotate(-1deg); }
-        .polaroid:nth-child(4) { transform: rotate(2deg); }
-        .polaroid:nth-child(5) { transform: rotate(-1.8deg); }
-        .polaroid:nth-child(6) { transform: rotate(0.8deg); }
+        .polaroid:nth-child(4) { transform: rotate(2.5deg); }
+        .polaroid:nth-child(5) { transform: rotate(-2deg); }
+        .polaroid:nth-child(6) { transform: rotate(1deg); }
 
         .polaroid:hover {
-            transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
-            box-shadow: 0 16px 48px rgba(123, 94, 167, 0.15);
+            transform: rotate(0deg) scale(1.06) translateY(-6px) !important;
+            box-shadow: 6px 6px 0 var(--coral);
             z-index: 10;
         }
 
-        .polaroid-img {
+        .pol-img {
             width: 100%;
             aspect-ratio: 1;
+            border-radius: 10px;
             overflow: hidden;
-        }
-
-        .polaroid-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Placeholder styling */
-        .polaroid-placeholder {
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: var(--beige-dark);
         }
 
-        .polaroid-placeholder svg {
-            width: 32px;
-            height: 32px;
-            opacity: 0.3;
+        .pol-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .ph-1 { background: linear-gradient(135deg, #EDE0FF, #F0E6F6); }
-        .ph-2 { background: linear-gradient(135deg, #F0E6F6, #F5EEF8); }
-        .ph-3 { background: linear-gradient(135deg, #F8F3EB, #F0E6F6); }
-        .ph-4 { background: linear-gradient(135deg, #EDE0FF, #F8F3EB); }
-        .ph-5 { background: linear-gradient(135deg, #F5EEF8, #EDE0FF); }
-        .ph-6 { background: linear-gradient(135deg, #F0E6F6, #F8F3EB); }
+        .pol-img svg {
+            width: 36px;
+            height: 36px;
+            opacity: 0.25;
+            stroke: var(--coral);
+        }
 
-        .polaroid-label {
-            font-family: var(--font-display);
-            font-size: 0.85rem;
-            font-style: italic;
-            color: var(--text-muted);
+        .pol-label {
+            font-family: var(--font-hand);
+            font-size: 0.95rem;
             text-align: center;
             margin-top: 10px;
+            font-weight: 700;
         }
 
         /* Modal */
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(42, 28, 58, 0.88);
-            backdrop-filter: blur(12px);
+            background: rgba(212, 85, 58, 0.15);
+            backdrop-filter: blur(10px);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -459,7 +366,7 @@
             padding: 24px;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.35s ease;
         }
 
         .modal.active {
@@ -467,43 +374,52 @@
             pointer-events: auto;
         }
 
-        .modal-inner {
-            background: white;
-            padding: 16px 16px 48px;
-            max-width: 480px;
+        .modal-card {
+            background: var(--beige-light);
+            border: 3px solid var(--coral);
+            border-radius: 20px;
+            padding: 14px 14px 48px;
+            max-width: 420px;
             width: 100%;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.3);
-            transform: scale(0.92);
-            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 8px 8px 0 var(--coral);
+            transform: scale(0.9) rotate(-2deg);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .modal.active .modal-inner {
-            transform: scale(1);
+        .modal.active .modal-card {
+            transform: scale(1) rotate(0deg);
         }
 
-        .modal-img {
+        .modal-pic {
             width: 100%;
             aspect-ratio: 4/3;
+            border-radius: 12px;
             overflow: hidden;
+            background: var(--beige-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .modal-img img {
+        .modal-pic img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .modal-img .polaroid-placeholder {
-            height: 100%;
+        .modal-pic svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.2;
+            stroke: var(--coral);
         }
 
-        .modal-text {
-            font-family: var(--font-display);
-            font-style: italic;
-            font-size: 1.1rem;
-            color: var(--lilac-600);
+        .modal-cap {
+            font-family: var(--font-hand);
+            font-size: 1.2rem;
             text-align: center;
-            margin-top: 16px;
+            margin-top: 14px;
+            font-weight: 700;
         }
 
         /* ============================================
@@ -511,133 +427,117 @@
            ============================================ */
         .love-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
-            max-width: 760px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        .love-element {
-            position: relative;
-            padding: 24px 20px;
+        .love-blob {
+            padding: 20px 16px;
             text-align: center;
-            border-radius: 12px;
-            border: 1px solid transparent;
+            border: 2.5px dashed transparent;
+            border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
             transition: all 0.4s ease;
-            cursor: default;
+            position: relative;
         }
 
-        .love-element:hover {
-            background: rgba(212, 190, 240, 0.1);
-            border-color: rgba(212, 190, 240, 0.25);
+        .love-blob:nth-child(2n) {
+            border-radius: 40% 50% 40% 50% / 50% 40% 50% 40%;
         }
 
-        .love-icon {
-            width: 36px;
-            height: 36px;
-            margin: 0 auto 14px;
-            opacity: 0.45;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            color: var(--lilac-500);
+        .love-blob:hover {
+            border-color: var(--coral);
+            background: var(--coral-soft);
         }
 
-        .love-element:hover .love-icon {
-            opacity: 0.85;
-            transform: scale(1.15);
+        .love-blob svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--coral);
+            opacity: 0.35;
+            transition: all 0.3s ease;
+            stroke-width: 2.5;
+            fill: none;
         }
 
-        .love-hidden {
-            font-family: var(--font-display);
-            font-style: italic;
+        .love-blob:hover svg {
+            opacity: 0.9;
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .love-text {
+            font-family: var(--font-hand);
             font-size: 1rem;
-            color: var(--lilac-600);
-            opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            font-weight: 700;
+            margin-top: 8px;
             max-height: 0;
             overflow: hidden;
-            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+            opacity: 0;
+            transition: all 0.35s ease;
         }
 
-        .love-element:hover .love-hidden {
+        .love-blob:hover .love-text {
+            max-height: 50px;
             opacity: 1;
-            transform: translateY(0);
-            max-height: 60px;
         }
 
         /* ============================================
            LOVE LETTER
            ============================================ */
         .letter {
-            max-width: 620px;
+            max-width: 580px;
             margin: 0 auto;
-            padding: 56px 48px;
-            background: var(--cream-warm);
-            border: 1px solid rgba(201, 169, 110, 0.2);
-            border-radius: 4px;
-            box-shadow: 0 4px 24px rgba(201, 169, 110, 0.08);
+            padding: 48px 40px;
+            background: var(--beige-light);
+            border: 3px solid var(--coral);
+            border-radius: 24px;
             position: relative;
+            box-shadow: 6px 6px 0 var(--coral-muted);
         }
 
-        .letter::before,
-        .letter::after {
-            content: '';
+        .letter-doodle {
             position: absolute;
-            width: 60px;
-            height: 60px;
-            opacity: 0.15;
-            border-color: var(--gold-soft);
-            border-style: solid;
-        }
-
-        .letter::before {
-            top: 16px;
-            left: 16px;
-            border-width: 1px 0 0 1px;
-        }
-
-        .letter::after {
-            bottom: 16px;
-            right: 16px;
-            border-width: 0 1px 1px 0;
+            top: -20px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
         }
 
         .letter-greeting {
-            font-family: var(--font-display);
+            font-family: var(--font-serif);
             font-style: italic;
-            font-size: 1.6rem;
-            color: var(--lilac-600);
-            margin-bottom: 28px;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
         }
 
         .letter-body {
-            font-size: 1.1rem;
-            line-height: 2;
-            color: var(--text-secondary);
-            font-weight: 300;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.9;
+            opacity: 0.75;
         }
 
-        .letter-body p {
-            margin-bottom: 16px;
-        }
+        .letter-body p { margin-bottom: 14px; }
 
-        .letter-signature {
-            font-family: var(--font-display);
-            font-style: italic;
-            font-size: 1.4rem;
-            color: var(--lilac-600);
+        .signature {
+            font-family: var(--font-hand);
+            font-size: 1.5rem;
+            font-weight: 700;
             text-align: right;
-            margin-top: 36px;
+            margin-top: 32px;
             user-select: none;
-            transition: color 0.3s ease;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            float: right;
         }
 
-        .letter-signature:hover {
-            color: var(--gold);
+        .signature:hover {
+            transform: rotate(-3deg) scale(1.05);
         }
 
-        /* Heart firework */
-        .firework-overlay {
+        /* Firework */
+        .fw-wrap {
             position: fixed;
             inset: 0;
             pointer-events: none;
@@ -645,597 +545,492 @@
             display: none;
         }
 
-        .fw-particle {
+        .fw-dot {
             position: absolute;
             border-radius: 50%;
-            animation: fwBurst 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            background: var(--coral);
+            animation: fwPop 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        @keyframes fwBurst {
-            0% { transform: translate(0, 0) scale(0); opacity: 1; }
-            60% { opacity: 0.8; }
-            100% { transform: var(--fw-end) scale(0); opacity: 0; }
+        @keyframes fwPop {
+            0% { transform: translate(0,0) scale(0); opacity: 1; }
+            60% { opacity: 0.9; }
+            100% { transform: var(--end) scale(0); opacity: 0; }
         }
 
-        /* ============================================
-           MUSIC TRIGGER
-           ============================================ */
-        .music-trigger {
+        /* ---- MUSIC ---- */
+        .music-btn {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 40px;
-            height: 40px;
+            bottom: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 1px solid var(--lilac-300);
-            background: rgba(253, 251, 247, 0.9);
-            backdrop-filter: blur(8px);
+            border: 2.5px solid var(--coral);
+            background: var(--beige);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100;
+            opacity: 0.35;
             transition: all 0.3s ease;
-            opacity: 0.4;
         }
 
-        .music-trigger:hover {
+        .music-btn:hover {
             opacity: 1;
-            border-color: var(--gold);
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 3px 3px 0 var(--coral);
         }
 
-        .music-trigger svg {
-            width: 16px;
-            height: 16px;
-            color: var(--lilac-500);
+        .music-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--coral);
+            fill: none;
         }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
+        /* ---- FOOTER ---- */
         footer {
             text-align: center;
-            padding: 80px 24px 60px;
-        }
-
-        footer .footer-line {
-            width: 40px;
-            height: 1px;
-            background: var(--gold-soft);
-            margin: 0 auto 32px;
+            padding: 80px 24px 50px;
         }
 
         footer p {
-            font-family: var(--font-display);
+            font-family: var(--font-serif);
             font-style: italic;
-            font-size: 1.3rem;
-            color: var(--lilac-600);
-            margin-bottom: 8px;
+            font-size: 1.4rem;
         }
 
-        footer .footer-sub {
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
+        footer .foot-sub {
+            font-family: var(--font-hand);
+            font-size: 1rem;
+            margin-top: 6px;
+            opacity: 0.5;
         }
 
-        .footer-heart {
+        .foot-heart {
             display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin: 20px 0 0;
-            position: relative;
+            margin-top: 20px;
+            animation: heartBeat 1.8s ease-in-out infinite;
         }
 
-        .footer-heart::before,
-        .footer-heart::after {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--lilac-400);
-            border-radius: 50% 50% 0 0;
+        .foot-heart svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--coral);
+            stroke: none;
         }
 
-        .footer-heart::before {
-            left: -3px;
-            transform: rotate(-45deg);
-            transform-origin: bottom right;
-        }
-
-        .footer-heart::after {
-            left: 3px;
-            transform: rotate(45deg);
-            transform-origin: bottom left;
-        }
-
-        .footer-heart {
-            animation: heartPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes heartPulse {
+        @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.25); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* ---- RESPONSIVE ---- */
         @media (max-width: 768px) {
-            section { padding: 72px 20px; }
-            .polaroids-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            section { padding: 72px 18px; }
+            .pol-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
             .timeline { padding-left: 36px; }
-            .timeline-item { padding: 24px; }
-            .letter { padding: 40px 28px; }
+            .tl-item { padding: 22px; }
+            .tl-item::before { left: -35px; width: 12px; height: 12px; }
+            .letter { padding: 36px 26px; }
             .love-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 480px) {
-            .polaroids-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .polaroid { padding: 6px 6px 32px; }
-            .timeline { padding-left: 28px; }
-            .timeline-item::before { left: -33px; }
-            .love-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .pol-grid { gap: 10px; }
+            .polaroid { padding: 6px 6px 30px; border-radius: 12px; }
+            .pol-img { border-radius: 8px; }
+            .love-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .love-blob { padding: 14px 10px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-gradient"></div>
-    <canvas id="particleCanvas"></canvas>
-    <div class="confetti-container" id="confetti"></div>
+    <div class="confetti-wrap" id="confetti"></div>
 
-    <!-- Custom Cursor -->
-    <div id="customCursor">
-        <div class="cursor-dot"></div>
-        <div class="cursor-ring"></div>
+    <!-- Custom cursor: small flower -->
+    <div id="cursor">
+        <svg viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="3" fill="#D4553A"/>
+            <circle cx="14" cy="7" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="19.9" cy="10.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="19.9" cy="17.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="14" cy="21" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="8.1" cy="17.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="8.1" cy="10.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+        </svg>
     </div>
 
-    <!-- Music Easter Egg -->
-    <div class="music-trigger" id="musicTrigger" title="play">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Music easter egg -->
+    <div class="music-btn" id="musicBtn">
+        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
         </svg>
     </div>
 
-    <!-- ================================ HERO ================================ -->
+    <!-- ======== HERO ======== -->
     <section class="hero">
-        <h1 class="hero-title" id="heroTitle">
-            <span class="word" style="animation-delay: 0.3s">Für</span>
-            <span class="word" style="animation-delay: 0.6s">Greta</span>
-        </h1>
-        <div class="hero-line"></div>
-        <p class="hero-subtitle">2 Jahre &middot; Unzählige Momente &middot; Eine Geschichte</p>
-        <div class="hero-scroll">
-            <svg viewBox="0 0 20 30" fill="none" stroke="var(--lilac-400)" stroke-width="1.5">
-                <rect x="1" y="1" width="18" height="28" rx="9"/>
-                <line x1="10" y1="8" x2="10" y2="14"/>
-            </svg>
-        </div>
+        <!-- Hand-drawn flower SVG -->
+        <svg class="hero-flower" viewBox="0 0 120 160" fill="none">
+            <!-- Stem -->
+            <path d="M60 160 C58 130, 55 110, 60 85" stroke="#D4553A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <!-- Leaves -->
+            <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#D4553A" stroke-width="2.5"/>
+            <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#D4553A" stroke-width="2.5"/>
+            <!-- Petals -->
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
+            <!-- Face -->
+            <circle cx="60" cy="48" r="12" fill="#E8DCD0" stroke="#D4553A" stroke-width="2.5"/>
+            <circle cx="55" cy="46" r="2" fill="#D4553A"/>
+            <circle cx="65" cy="46" r="2" fill="#D4553A"/>
+            <path d="M55 52 C57 55, 63 55, 65 52" stroke="#D4553A" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+
+        <h1 class="hero-title">für greta</h1>
+
+        <svg class="hero-doodle-line" viewBox="0 0 100 6" fill="none">
+            <path d="M0 3 C10 0, 20 6, 30 3 C40 0, 50 6, 60 3 C70 0, 80 6, 90 3 C95 1, 98 3, 100 3" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+
+        <p class="hero-sub">2 jahre. unzählige momente. eine geschichte.</p>
+
+        <div class="hero-scroll"><span>scroll down</span></div>
     </section>
 
-    <!-- ================================ OUR STORY ================================ -->
+    <!-- ======== OUR STORY ======== -->
     <section id="story">
-        <div class="section-label reveal">Kapitel für Kapitel</div>
-        <h2 class="section-heading reveal">Our <em>Story</em></h2>
-        <div class="divider reveal"></div>
+        <div class="section-label reveal">kapitel für kapitel</div>
+        <h2 class="section-heading reveal">our story</h2>
+        <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
 
         <div class="timeline">
             <!-- TIMELINE EINTRAG 1: Ersetze Datum und Text -->
-            <div class="timeline-item reveal">
-                <div class="timeline-date">[Datum einfügen]</div>
-                <h3 class="timeline-title">Der Anfang</h3>
-                <p class="timeline-text">
-                    [Hier kommt euer erster gemeinsamer Moment – wie ihr euch kennengelernt habt, euer erstes Date, der erste Blickkontakt...]
-                </p>
+            <div class="tl-item reveal">
+                <div class="tl-date">[datum einfügen]</div>
+                <h3 class="tl-title">der anfang</h3>
+                <p class="tl-text">[Hier kommt euer erster gemeinsamer Moment – wie ihr euch kennengelernt habt, euer erstes Date, der erste Blickkontakt...]</p>
             </div>
 
             <!-- TIMELINE EINTRAG 2: Ersetze mit einem besonderen Moment -->
-            <div class="timeline-item reveal">
-                <div class="timeline-date">[Datum einfügen]</div>
-                <h3 class="timeline-title">[Besonderer Moment]</h3>
-                <p class="timeline-text">
-                    [Beschreibung eines besonderen Moments – ein Urlaub, ein lustiger Moment, etwas das euch zusammengeschweißt hat...]
-                </p>
+            <div class="tl-item reveal">
+                <div class="tl-date">[datum einfügen]</div>
+                <h3 class="tl-title">[besonderer moment]</h3>
+                <p class="tl-text">[Beschreibung eines besonderen Moments – ein Urlaub, ein lustiger Moment, etwas das euch zusammengeschweißt hat...]</p>
             </div>
 
             <!-- TIMELINE EINTRAG 3: Heute -->
-            <div class="timeline-item reveal">
-                <div class="timeline-date">Heute</div>
-                <h3 class="timeline-title">2 Jahre</h3>
-                <p class="timeline-text">
-                    Und das ist erst der Anfang. Jeder Tag mit dir ist ein Geschenk, und ich kann es kaum erwarten, was die Zukunft für uns bereithält.
-                </p>
+            <div class="tl-item reveal">
+                <div class="tl-date">heute</div>
+                <h3 class="tl-title">2 jahre</h3>
+                <p class="tl-text">Und das ist erst der Anfang. Jeder Tag mit dir ist ein Geschenk, und ich kann es kaum erwarten, was die Zukunft für uns bereithält.</p>
             </div>
         </div>
     </section>
 
-    <!-- ================================ POLAROIDS ================================ -->
+    <!-- ======== POLAROIDS ======== -->
     <section id="photos">
-        <div class="section-label reveal">Momente</div>
-        <h2 class="section-heading reveal"><em>Polaroids</em></h2>
-        <div class="divider reveal"></div>
+        <div class="section-label reveal">momente</div>
+        <h2 class="section-heading reveal">polaroids</h2>
+        <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
 
-        <div class="polaroids-grid reveal">
-            <!-- FOTO 1: Ersetze das placeholder div mit <img src="foto1.jpg" alt="..."> -->
-            <div class="polaroid" data-caption="[Euer schönster Moment hier]" data-ph="ph-1">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-1">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </div>
+        <div class="pol-grid reveal">
+            <!-- FOTO 1: Ersetze das SVG mit <img src="foto1.jpg" alt="..."> -->
+            <div class="polaroid" data-caption="[euer schönster moment hier]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 1</div>
+                <div class="pol-label">moment 1</div>
             </div>
 
             <!-- FOTO 2 -->
-            <div class="polaroid" data-caption="[Eine lustige Erinnerung]" data-ph="ph-2">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-2">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    </div>
+            <div class="polaroid" data-caption="[eine lustige erinnerung]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 2</div>
+                <div class="pol-label">moment 2</div>
             </div>
 
             <!-- FOTO 3 -->
-            <div class="polaroid" data-caption="[Ein Abenteuer zusammen]" data-ph="ph-3">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-3">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                    </div>
+            <div class="polaroid" data-caption="[ein abenteuer zusammen]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 3</div>
+                <div class="pol-label">moment 3</div>
             </div>
 
             <!-- FOTO 4 -->
-            <div class="polaroid" data-caption="[Ein ruhiger Moment zu zweit]" data-ph="ph-4">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-4">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    </div>
+            <div class="polaroid" data-caption="[ein ruhiger moment zu zweit]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 4</div>
+                <div class="pol-label">moment 4</div>
             </div>
 
             <!-- FOTO 5 -->
-            <div class="polaroid" data-caption="[Etwas das euch zum Lachen bringt]" data-ph="ph-5">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-5">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                    </div>
+            <div class="polaroid" data-caption="[etwas das euch zum lachen bringt]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 5</div>
+                <div class="pol-label">moment 5</div>
             </div>
 
             <!-- FOTO 6 -->
-            <div class="polaroid" data-caption="[Ein Foto das alles sagt]" data-ph="ph-6">
-                <div class="polaroid-img">
-                    <div class="polaroid-placeholder ph-6">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                    </div>
+            <div class="polaroid" data-caption="[ein foto das alles sagt]">
+                <div class="pol-img">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 </div>
-                <div class="polaroid-label">Moment 6</div>
+                <div class="pol-label">moment 6</div>
             </div>
         </div>
     </section>
 
     <!-- Photo Modal -->
-    <div class="modal" id="photoModal">
-        <div class="modal-inner">
-            <div class="modal-img" id="modalImg"></div>
-            <div class="modal-text" id="modalText"></div>
+    <div class="modal" id="modal">
+        <div class="modal-card">
+            <div class="modal-pic" id="modalPic"></div>
+            <div class="modal-cap" id="modalCap"></div>
         </div>
     </div>
 
-    <!-- ================================ WHY I LOVE YOU ================================ -->
+    <!-- ======== WHY I LOVE YOU ======== -->
     <section id="love">
-        <div class="section-label reveal">Die kleinen Dinge</div>
-        <h2 class="section-heading reveal">Why I <em>Love</em> You</h2>
-        <div class="divider reveal"></div>
+        <div class="section-label reveal">die kleinen dinge</div>
+        <h2 class="section-heading reveal">why i love you</h2>
+        <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
 
-        <p style="text-align:center; color: var(--text-muted); font-size: 0.95rem; font-style: italic; margin-bottom: 36px;" class="reveal">
-            Hover über die Symbole...
+        <p style="text-align:center; font-family:var(--font-hand); font-size:1rem; opacity:0.45; margin-bottom:30px;" class="reveal">
+            hover über die symbole...
         </p>
 
-        <div class="love-grid reveal" id="loveGrid">
-            <!-- Dynamisch via JS -->
-        </div>
+        <div class="love-grid reveal" id="loveGrid"></div>
     </section>
 
-    <!-- ================================ LOVE LETTER ================================ -->
+    <!-- ======== LOVE LETTER ======== -->
     <section id="letter">
-        <div class="section-label reveal">Von Herzen</div>
-        <h2 class="section-heading reveal">A Letter <em>For You</em></h2>
-        <div class="divider reveal"></div>
+        <div class="section-label reveal">von herzen</div>
+        <h2 class="section-heading reveal">a letter for you</h2>
+        <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
 
         <div class="letter reveal">
-            <div class="letter-greeting">Meine liebste Greta,</div>
+            <!-- Small doodle heart top right -->
+            <svg class="letter-doodle" viewBox="0 0 50 50" fill="none">
+                <path d="M25 45 C15 35, 2 28, 2 18 C2 10, 8 4, 15 4 C19 4, 22 6, 25 10 C28 6, 31 4, 35 4 C42 4, 48 10, 48 18 C48 28, 35 35, 25 45Z" stroke="#D4553A" stroke-width="2.5" fill="none"/>
+            </svg>
+
+            <div class="letter-greeting">meine liebste greta,</div>
             <div class="letter-body">
                 <!-- LIEBESBRIEF: Hier deinen persönlichen Text einfügen -->
-                <p>
-                    [Hier kommt dein persönlicher Brief an Greta. Schreibe von Herzen –
-                    erzähle ihr, was sie dir bedeutet, was du an ihr liebst, welche Momente
-                    du nie vergessen wirst...]
-                </p>
-                <p>
-                    [Du kannst so viele Absätze schreiben, wie du möchtest.
-                    Jeder Absatz wird in einem eigenen &lt;p&gt;-Tag eingeschlossen.]
-                </p>
-                <p>
-                    [Mach es persönlich, mach es ehrlich, mach es von Herzen.]
-                </p>
+                <p>[Hier kommt dein persönlicher Brief an Greta. Schreibe von Herzen – erzähle ihr, was sie dir bedeutet, was du an ihr liebst, welche Momente du nie vergessen wirst...]</p>
+                <p>[Du kannst so viele Absätze schreiben, wie du möchtest. Jeder Absatz wird in einem eigenen &lt;p&gt;-Tag eingeschlossen.]</p>
+                <p>[Mach es persönlich, mach es ehrlich, mach es von Herzen.]</p>
             </div>
             <!-- Easter Egg: 3x Klick = Herz-Feuerwerk -->
-            <div class="letter-signature" id="letterSig">In Liebe, Luca</div>
+            <div class="signature" id="sig">in liebe, luca</div>
+            <div style="clear:both"></div>
         </div>
     </section>
 
-    <!-- Firework overlay -->
-    <div class="firework-overlay" id="fireworkOverlay"></div>
+    <div class="fw-wrap" id="fwWrap"></div>
 
-    <!-- ================================ FOOTER ================================ -->
+    <!-- ======== FOOTER ======== -->
     <footer>
-        <div class="footer-line"></div>
-        <p>Happy 2nd Anniversary, Greta</p>
-        <div class="footer-sub">LUCA</div>
-        <div class="footer-heart"></div>
+        <p>happy 2nd anniversary, greta</p>
+        <div class="foot-sub">– luca</div>
+        <div class="foot-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
     </footer>
 
     <script>
     (function() {
         'use strict';
 
-        /* ---- Custom Cursor ---- */
-        const cursor = document.getElementById('customCursor');
+        /* ---- Cursor ---- */
+        const cur = document.getElementById('cursor');
         const isTouch = matchMedia('(pointer: coarse)').matches;
 
         if (!isTouch) {
-            let cx = -100, cy = -100;
             document.addEventListener('mousemove', e => {
-                cx = e.clientX; cy = e.clientY;
-                cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+                cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
             });
-
-            const hoverEls = document.querySelectorAll('a, button, .polaroid, .love-element, .letter-signature, .music-trigger');
-            hoverEls.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+            document.addEventListener('mouseover', e => {
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, a, button')) {
+                    cur.classList.add('hover');
+                }
+            });
+            document.addEventListener('mouseout', e => {
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, a, button')) {
+                    cur.classList.remove('hover');
+                }
             });
         } else {
-            cursor.style.display = 'none';
+            cur.style.display = 'none';
         }
 
-        /* ---- Confetti ---- */
+        /* ---- Confetti (shapes only, no emoji) ---- */
         (function() {
-            const container = document.getElementById('confetti');
-            const colors = ['#C4A8E0', '#D4BEF0', '#C9A96E', '#D4BC8A', '#EDE0FF', '#9B7EC8', '#BFA76F'];
-            const count = 100;
-
+            const wrap = document.getElementById('confetti');
+            const count = 70;
             for (let i = 0; i < count; i++) {
-                const piece = document.createElement('div');
-                const types = ['', 'star', 'heart'];
-                const type = types[Math.floor(Math.random() * types.length)];
-                piece.className = 'confetti-piece' + (type ? ' ' + type : '');
-                piece.style.left = Math.random() * 100 + '%';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.width = piece.style.height = (Math.random() * 6 + 4) + 'px';
-                piece.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
-                piece.style.animationDelay = (Math.random() * 1.5) + 's';
-                container.appendChild(piece);
+                const d = document.createElement('div');
+                d.className = 'confetti-dot';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.width = d.style.height = (Math.random() * 7 + 3) + 'px';
+                d.style.opacity = Math.random() * 0.5 + 0.4;
+                d.style.background = Math.random() > 0.3 ? '#D4553A' : '#E8DCD0';
+                d.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+                d.style.animationDelay = (Math.random() * 1.5) + 's';
+                if (Math.random() > 0.5) {
+                    d.style.borderRadius = '2px';
+                    d.style.transform = `rotate(${Math.random()*45}deg)`;
+                }
+                wrap.appendChild(d);
             }
-
-            setTimeout(() => container.remove(), 5000);
+            setTimeout(() => wrap.remove(), 5500);
         })();
 
-        /* ---- Particle Canvas ---- */
-        (function() {
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let w, h;
-
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            }
-
-            resize();
-            window.addEventListener('resize', resize);
-
-            class Particle {
-                constructor() { this.reset(); }
-                reset() {
-                    this.x = Math.random() * w;
-                    this.y = h + Math.random() * 100;
-                    this.size = Math.random() * 3 + 1;
-                    this.speedY = -(Math.random() * 0.3 + 0.1);
-                    this.speedX = (Math.random() - 0.5) * 0.2;
-                    this.opacity = Math.random() * 0.15 + 0.03;
-                    this.hue = Math.random() > 0.5 ? '270' : '40';
-                }
-                update() {
-                    this.y += this.speedY;
-                    this.x += this.speedX + Math.sin(this.y * 0.005) * 0.15;
-                    if (this.y < -20) this.reset();
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${this.hue}, 40%, 70%, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
-
-            for (let i = 0; i < 40; i++) {
-                const p = new Particle();
-                p.y = Math.random() * h;
-                particles.push(p);
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, w, h);
-                particles.forEach(p => { p.update(); p.draw(); });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        })();
-
-        /* ---- Parallax on scroll ---- */
-        const bgGrad = document.querySelector('.bg-gradient');
-        window.addEventListener('scroll', () => {
-            const s = window.scrollY;
-            bgGrad.style.transform = `translateY(${s * 0.15}px)`;
-        }, { passive: true });
-
-        /* ---- Scroll Reveal ---- */
-        const revealEls = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver(entries => {
+        /* ---- Scroll reveal ---- */
+        const obs = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        revealEls.forEach(el => revealObserver.observe(el));
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-        /* ---- Polaroid Modal ---- */
-        const modal = document.getElementById('photoModal');
-        const modalImg = document.getElementById('modalImg');
-        const modalText = document.getElementById('modalText');
+        /* ---- Modal ---- */
+        const modal = document.getElementById('modal');
+        const modalPic = document.getElementById('modalPic');
+        const modalCap = document.getElementById('modalCap');
 
         document.querySelectorAll('.polaroid').forEach(p => {
             p.addEventListener('click', () => {
-                const img = p.querySelector('.polaroid-img img');
-                const ph = p.querySelector('.polaroid-placeholder');
-                modalImg.innerHTML = '';
+                const img = p.querySelector('.pol-img img');
+                const svg = p.querySelector('.pol-img svg');
+                modalPic.innerHTML = '';
                 if (img) {
-                    const clone = img.cloneNode();
-                    modalImg.appendChild(clone);
-                } else if (ph) {
-                    const clone = ph.cloneNode(true);
-                    clone.style.height = '100%';
-                    modalImg.appendChild(clone);
+                    modalPic.appendChild(img.cloneNode());
+                } else if (svg) {
+                    const clone = svg.cloneNode(true);
+                    clone.style.width = '48px';
+                    clone.style.height = '48px';
+                    modalPic.appendChild(clone);
                 }
-                modalText.textContent = p.dataset.caption;
+                modalCap.textContent = p.dataset.caption;
                 modal.classList.add('active');
             });
         });
 
         modal.addEventListener('click', () => modal.classList.remove('active'));
 
-        /* ---- Why I Love You ---- */
+        /* ---- Love reasons ---- */
         (function() {
             const grid = document.getElementById('loveGrid');
             // GRÜNDE: Ersetze die Platzhalter-Texte mit deinen persönlichen Gründen
-            const reasons = [
-                { svg: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>', text: '[Grund 1: z.B. Dein Lachen]' },
-                { svg: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>', text: '[Grund 2: z.B. Deine Umarmungen]' },
-                { svg: '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>', text: '[Grund 3: z.B. Wie du mich anschaust]' },
-                { svg: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>', text: '[Grund 4: z.B. Deine Stimme]' },
-                { svg: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>', text: '[Grund 5: z.B. Dein Humor]' },
-                { svg: '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>', text: '[Grund 6: z.B. Wie du tanzt]' },
-                { svg: '<path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>', text: '[Grund 7: z.B. Deine Güte]' },
-                { svg: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', text: '[Grund 8: z.B. Wie du mich zum Lachen bringst]' },
-                { svg: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', text: '[Grund 9: z.B. Dass du immer für mich da bist]' },
-                { svg: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>', text: '[Grund 10: z.B. Einfach alles an dir]' },
+            const items = [
+                { d: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', t: '[dein lachen]' },
+                { d: 'M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z', t: '[deine umarmungen]' },
+                { d: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01', t: '[wie du mich anschaust]' },
+                { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z', t: '[deine stimme]' },
+                { d: 'M9 18V5l12-2v13M6 18a3 3 0 100-6 3 3 0 000 6zM18 16a3 3 0 100-6 3 3 0 000 6z', t: '[dein humor]' },
+                { d: 'M12 3v1m0 16v1m-9-9h1m16 0h1m-2.636-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z', t: '[wie du tanzt]' },
+                { d: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3', t: '[deine güte]' },
+                { d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', t: '[dass du immer da bist]' },
+                { d: 'M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z', t: '[wie du mich zum lachen bringst]' },
+                { d: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', t: '[einfach alles an dir]' },
             ];
 
-            reasons.forEach(r => {
+            items.forEach(it => {
                 const el = document.createElement('div');
-                el.className = 'love-element';
-                el.innerHTML = `
-                    <svg class="love-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${r.svg}</svg>
-                    <div class="love-hidden">${r.text}</div>
-                `;
+                el.className = 'love-blob';
+                el.innerHTML = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="${it.d}"/></svg><div class="love-text">${it.t}</div>`;
                 grid.appendChild(el);
             });
-
-            // Re-observe for cursor hover
-            if (!isTouch) {
-                grid.querySelectorAll('.love-element').forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
-                });
-            }
         })();
 
-        /* ---- Signature Easter Egg ---- */
+        /* ---- Signature easter egg ---- */
         (function() {
-            const sig = document.getElementById('letterSig');
-            const overlay = document.getElementById('fireworkOverlay');
-            let clicks = 0, timer;
+            const sig = document.getElementById('sig');
+            const fw = document.getElementById('fwWrap');
+            let n = 0, t;
 
             sig.addEventListener('click', () => {
-                clicks++;
-                clearTimeout(timer);
-                timer = setTimeout(() => clicks = 0, 600);
-                if (clicks >= 3) {
-                    clicks = 0;
-                    fireHearts();
-                }
+                n++; clearTimeout(t);
+                t = setTimeout(() => n = 0, 600);
+                if (n >= 3) { n = 0; boom(); }
             });
 
-            function fireHearts() {
-                overlay.style.display = 'block';
-                overlay.innerHTML = '';
-                const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-                const colors = ['#C4A8E0', '#D4BEF0', '#C9A96E', '#9B7EC8', '#7B5EA7'];
+            function boom() {
+                fw.style.display = 'block';
+                fw.innerHTML = '';
+                const cx = innerWidth / 2, cy = innerHeight / 2;
 
-                for (let wave = 0; wave < 3; wave++) {
+                for (let w = 0; w < 3; w++) {
                     setTimeout(() => {
-                        const count = 30;
-                        for (let i = 0; i < count; i++) {
+                        for (let i = 0; i < 28; i++) {
                             const p = document.createElement('div');
-                            p.className = 'fw-particle';
-                            const ox = (Math.random() - 0.5) * 200 * wave;
-                            const oy = (Math.random() - 0.5) * 100 * wave;
+                            p.className = 'fw-dot';
+                            const ox = (Math.random() - 0.5) * 160 * w;
+                            const oy = (Math.random() - 0.5) * 80 * w;
                             p.style.left = (cx + ox) + 'px';
                             p.style.top = (cy + oy) + 'px';
-                            p.style.background = colors[Math.floor(Math.random() * colors.length)];
-                            const size = Math.random() * 6 + 3;
-                            p.style.width = p.style.height = size + 'px';
-                            const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
-                            const dist = Math.random() * 200 + 80;
-                            p.style.setProperty('--fw-end', `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`);
-                            p.style.animationDelay = (Math.random() * 0.2) + 's';
-                            overlay.appendChild(p);
+                            const sz = Math.random() * 8 + 3;
+                            p.style.width = p.style.height = sz + 'px';
+                            const a = (Math.PI * 2 * i) / 28 + Math.random() * 0.3;
+                            const d = Math.random() * 180 + 60;
+                            p.style.setProperty('--end', `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px)`);
+                            p.style.animationDelay = (Math.random() * 0.15) + 's';
+                            fw.appendChild(p);
                         }
-                    }, wave * 300);
+                    }, w * 250);
                 }
 
-                setTimeout(() => { overlay.style.display = 'none'; overlay.innerHTML = ''; }, 2500);
+                setTimeout(() => { fw.style.display = 'none'; fw.innerHTML = ''; }, 2200);
             }
         })();
 
-        /* ---- Music Easter Egg ---- */
+        /* ---- Music ---- */
         (function() {
-            const btn = document.getElementById('musicTrigger');
-            let audioCtx;
+            const btn = document.getElementById('musicBtn');
+            let ctx;
 
             btn.addEventListener('click', () => {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-                // C E G C' (ascending arpeggio, soft & warm)
-                const melody = [
-                    { freq: 523.25, dur: 0.25, delay: 0 },
-                    { freq: 659.25, dur: 0.25, delay: 0.18 },
-                    { freq: 783.99, dur: 0.25, delay: 0.36 },
-                    { freq: 1046.50, dur: 0.5, delay: 0.54 },
-                    { freq: 783.99, dur: 0.2, delay: 0.9 },
-                    { freq: 659.25, dur: 0.2, delay: 1.05 },
-                    { freq: 523.25, dur: 0.6, delay: 1.2 },
+                if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [
+                    { f: 523.25, d: 0.28, t: 0 },
+                    { f: 659.25, d: 0.28, t: 0.2 },
+                    { f: 783.99, d: 0.28, t: 0.4 },
+                    { f: 1046.5, d: 0.5, t: 0.6 },
+                    { f: 783.99, d: 0.22, t: 1.0 },
+                    { f: 659.25, d: 0.22, t: 1.15 },
+                    { f: 523.25, d: 0.6, t: 1.3 },
                 ];
 
-                const now = audioCtx.currentTime;
-                melody.forEach(n => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.value = n.freq;
-                    gain.gain.setValueAtTime(0, now + n.delay);
-                    gain.gain.linearRampToValueAtTime(0.08, now + n.delay + 0.03);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + n.delay + n.dur);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(now + n.delay);
-                    osc.stop(now + n.delay + n.dur);
+                const now = ctx.currentTime;
+                notes.forEach(n => {
+                    const o = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    o.type = 'triangle';
+                    o.frequency.value = n.f;
+                    g.gain.setValueAtTime(0, now + n.t);
+                    g.gain.linearRampToValueAtTime(0.07, now + n.t + 0.03);
+                    g.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+                    o.connect(g);
+                    g.connect(ctx.destination);
+                    o.start(now + n.t);
+                    o.stop(now + n.t + n.d);
                 });
             });
         })();
