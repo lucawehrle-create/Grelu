@@ -17,19 +17,19 @@
             --coral: #D4553A;
             --coral-light: #E07860;
             --coral-soft: rgba(212, 85, 58, 0.08);
-            --coral-muted: rgba(212, 85, 58, 0.5);
-            --text: #D4553A;
-            --text-light: rgba(212, 85, 58, 0.6);
+            --mustard: #E3A832;
+            --sage: #7BA seventeen68;
+            --sage: #7B9B68;
+            --sky: #6BA4C9;
+            --pink: #D98BA5;
+            --lavender: #9B7EC8;
 
             --font-hand: 'Gaegu', cursive;
             --font-serif: 'Instrument Serif', serif;
             --font-body: 'DM Sans', sans-serif;
         }
 
-        *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box;
-        }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
@@ -40,39 +40,43 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        ::selection {
-            background: var(--coral);
-            color: var(--beige);
-        }
+        ::selection { background: var(--coral); color: var(--beige); }
 
-        /* ---- CUSTOM CURSOR ---- */
+        /* ---- CUSTOM CURSOR (flower) ---- */
         @media (pointer: fine) {
-            body, a, button, .polaroid, .love-blob, .signature { cursor: none; }
+            body, a, button, .polaroid, .love-blob, .signature, .music-btn, .doodle-float { cursor: none; }
         }
 
         #cursor {
             position: fixed;
             pointer-events: none;
             z-index: 99999;
+            mix-blend-mode: multiply;
         }
 
         #cursor svg {
-            width: 28px;
-            height: 28px;
-            transform: translate(-14px, -14px);
+            width: 30px;
+            height: 30px;
+            transform: translate(-15px, -15px);
             transition: transform 0.15s ease;
         }
 
         #cursor.hover svg {
-            transform: translate(-14px, -14px) scale(1.4) rotate(15deg);
+            transform: translate(-15px, -15px) scale(1.5) rotate(20deg);
         }
 
-        /* ---- DOODLE DECORATIONS ---- */
-        .doodle {
-            position: absolute;
+        /* ---- CURSOR TRAIL ---- */
+        .trail-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--coral);
             pointer-events: none;
-            color: var(--coral);
-            opacity: 0.12;
+            z-index: 99998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            mix-blend-mode: multiply;
         }
 
         /* ---- CONFETTI ---- */
@@ -85,16 +89,41 @@
 
         .confetti-dot {
             position: absolute;
-            border-radius: 50%;
-            background: var(--coral);
-            top: -10px;
+            top: -12px;
             opacity: 0;
             animation: confDrop linear forwards;
         }
 
+        .conf-circle { border-radius: 50%; }
+        .conf-square { border-radius: 2px; }
+        .conf-star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        .conf-heart {
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+        }
+
         @keyframes confDrop {
-            0% { opacity: 0.9; transform: translateY(0) rotate(0deg) scale(1); }
-            100% { opacity: 0; transform: translateY(110vh) rotate(600deg) scale(0.4); }
+            0% { opacity: 0.95; transform: translateY(0) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translateY(110vh) rotate(720deg) scale(0.3); }
+        }
+
+        /* ---- FLOATING DOODLES (scattered around page) ---- */
+        .doodle-float {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            animation: doodleDrift 8s ease-in-out infinite alternate;
+        }
+
+        .doodle-float svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes doodleDrift {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-12px) rotate(5deg); }
         }
 
         /* ---- SECTIONS ---- */
@@ -133,13 +162,44 @@
             height: 12px;
         }
 
+        /* Animated squiggle draw-in */
+        .squiggle path {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .squiggle.drawn path {
+            stroke-dashoffset: 0;
+        }
+
         /* ---- SCROLL REVEAL ---- */
         .reveal {
             opacity: 0;
             transform: translateY(24px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
+
         .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered children */
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+        .stagger.visible > *:nth-child(2) { transition-delay: 0.08s; }
+        .stagger.visible > *:nth-child(3) { transition-delay: 0.16s; }
+        .stagger.visible > *:nth-child(4) { transition-delay: 0.24s; }
+        .stagger.visible > *:nth-child(5) { transition-delay: 0.32s; }
+        .stagger.visible > *:nth-child(6) { transition-delay: 0.4s; }
+
+        .stagger.visible > * {
             opacity: 1;
             transform: translateY(0);
         }
@@ -159,16 +219,27 @@
         }
 
         .hero-flower {
-            width: 120px;
+            width: 130px;
             height: auto;
             margin-bottom: 32px;
             opacity: 0;
             animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
         }
 
+        /* Flower sways gently forever */
+        .hero-flower {
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards,
+                       sway 4s ease-in-out 1.2s infinite;
+        }
+
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            from { opacity: 0; transform: scale(0.5) rotate(-15deg); }
             to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
         }
 
         .hero-title {
@@ -179,6 +250,20 @@
             line-height: 1;
             opacity: 0;
             animation: fadeUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-title .colored {
+            color: var(--mustard);
+            display: inline-block;
+            animation: fadeUp 0.8s ease 0.8s forwards, colorCycle 8s ease-in-out 2s infinite;
+            opacity: 0;
+        }
+
+        @keyframes colorCycle {
+            0%, 100% { color: var(--mustard); }
+            25% { color: var(--pink); }
+            50% { color: var(--lavender); }
+            75% { color: var(--sage); }
         }
 
         .hero-sub {
@@ -222,6 +307,110 @@
             50% { transform: translateY(6px); }
         }
 
+        /* Small doodle decorations around hero */
+        .hero-deco {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .hero-deco.visible { opacity: 1; }
+
+        .hero-deco-1 {
+            top: 15%;
+            left: 8%;
+            animation: fadeUp 0.8s ease 1.8s forwards, doodleDrift 6s ease-in-out 2.5s infinite alternate;
+        }
+
+        .hero-deco-2 {
+            top: 20%;
+            right: 10%;
+            animation: fadeUp 0.8s ease 2s forwards, doodleDrift 7s ease-in-out 3s infinite alternate-reverse;
+        }
+
+        .hero-deco-3 {
+            bottom: 20%;
+            left: 12%;
+            animation: fadeUp 0.8s ease 2.2s forwards, doodleDrift 5s ease-in-out 2.8s infinite alternate;
+        }
+
+        .hero-deco-4 {
+            bottom: 25%;
+            right: 8%;
+            animation: fadeUp 0.8s ease 2.4s forwards, doodleDrift 8s ease-in-out 3.2s infinite alternate-reverse;
+        }
+
+        /* Click-the-flower easter egg */
+        .hero-flower.clicked {
+            animation: flowerSpin 0.6s ease;
+        }
+
+        @keyframes flowerSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .flower-msg {
+            font-family: var(--font-hand);
+            font-size: 1.1rem;
+            font-weight: 700;
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatMsg 2s ease forwards;
+            white-space: nowrap;
+        }
+
+        @keyframes floatMsg {
+            0% { opacity: 0; transform: translateY(0) scale(0.8); }
+            20% { opacity: 1; transform: translateY(-20px) scale(1); }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.9); }
+        }
+
+        /* ============================================
+           COUNTER SECTION (new!)
+           ============================================ */
+        .counter-section {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .counter-row {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .counter-item {
+            text-align: center;
+        }
+
+        .counter-num {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .counter-label {
+            font-family: var(--font-hand);
+            font-size: 0.95rem;
+            font-weight: 700;
+            opacity: 0.55;
+            margin-top: 4px;
+        }
+
+        .c-coral { color: var(--coral); }
+        .c-mustard { color: var(--mustard); }
+        .c-sage { color: var(--sage); }
+        .c-sky { color: var(--sky); }
+        .c-pink { color: var(--pink); }
+        .c-lavender { color: var(--lavender); }
+
         /* ============================================
            TIMELINE
            ============================================ */
@@ -237,9 +426,9 @@
             top: 0;
             bottom: 0;
             width: 3px;
-            background: var(--coral);
             border-radius: 3px;
-            opacity: 0.2;
+            background: linear-gradient(to bottom, var(--coral), var(--mustard), var(--pink), var(--lavender), var(--sage));
+            opacity: 0.35;
         }
 
         .tl-item {
@@ -249,12 +438,20 @@
             background: var(--coral-soft);
             border: 2.5px solid var(--coral);
             border-radius: 20px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .tl-item:nth-child(2) { border-color: var(--mustard); }
+        .tl-item:nth-child(3) { border-color: var(--sage); }
 
         .tl-item:hover {
             transform: translateX(6px) rotate(0.3deg);
+            box-shadow: 5px 5px 0 currentColor;
         }
+
+        .tl-item:nth-child(1):hover { box-shadow: 5px 5px 0 var(--coral); }
+        .tl-item:nth-child(2):hover { box-shadow: 5px 5px 0 var(--mustard); }
+        .tl-item:nth-child(3):hover { box-shadow: 5px 5px 0 var(--sage); }
 
         .tl-item::before {
             content: '';
@@ -263,9 +460,12 @@
             top: 32px;
             width: 14px;
             height: 14px;
-            background: var(--coral);
             border-radius: 50%;
         }
+
+        .tl-item:nth-child(1)::before { background: var(--coral); }
+        .tl-item:nth-child(2)::before { background: var(--mustard); }
+        .tl-item:nth-child(3)::before { background: var(--sage); }
 
         .tl-date {
             font-family: var(--font-hand);
@@ -308,16 +508,22 @@
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
 
-        .polaroid:nth-child(1) { transform: rotate(-3deg); }
-        .polaroid:nth-child(2) { transform: rotate(1.5deg); }
-        .polaroid:nth-child(3) { transform: rotate(-1deg); }
-        .polaroid:nth-child(4) { transform: rotate(2.5deg); }
-        .polaroid:nth-child(5) { transform: rotate(-2deg); }
-        .polaroid:nth-child(6) { transform: rotate(1deg); }
+        .polaroid:nth-child(1) { transform: rotate(-3deg); border-color: var(--coral); }
+        .polaroid:nth-child(2) { transform: rotate(1.5deg); border-color: var(--mustard); }
+        .polaroid:nth-child(3) { transform: rotate(-1deg); border-color: var(--sage); }
+        .polaroid:nth-child(4) { transform: rotate(2.5deg); border-color: var(--sky); }
+        .polaroid:nth-child(5) { transform: rotate(-2deg); border-color: var(--pink); }
+        .polaroid:nth-child(6) { transform: rotate(1deg); border-color: var(--lavender); }
+
+        .polaroid:nth-child(1):hover { box-shadow: 6px 6px 0 var(--coral); }
+        .polaroid:nth-child(2):hover { box-shadow: 6px 6px 0 var(--mustard); }
+        .polaroid:nth-child(3):hover { box-shadow: 6px 6px 0 var(--sage); }
+        .polaroid:nth-child(4):hover { box-shadow: 6px 6px 0 var(--sky); }
+        .polaroid:nth-child(5):hover { box-shadow: 6px 6px 0 var(--pink); }
+        .polaroid:nth-child(6):hover { box-shadow: 6px 6px 0 var(--lavender); }
 
         .polaroid:hover {
             transform: rotate(0deg) scale(1.06) translateY(-6px) !important;
-            box-shadow: 6px 6px 0 var(--coral);
             z-index: 10;
         }
 
@@ -342,8 +548,14 @@
             width: 36px;
             height: 36px;
             opacity: 0.25;
-            stroke: var(--coral);
         }
+
+        .polaroid:nth-child(1) .pol-img svg { stroke: var(--coral); }
+        .polaroid:nth-child(2) .pol-img svg { stroke: var(--mustard); }
+        .polaroid:nth-child(3) .pol-img svg { stroke: var(--sage); }
+        .polaroid:nth-child(4) .pol-img svg { stroke: var(--sky); }
+        .polaroid:nth-child(5) .pol-img svg { stroke: var(--pink); }
+        .polaroid:nth-child(6) .pol-img svg { stroke: var(--lavender); }
 
         .pol-label {
             font-family: var(--font-hand);
@@ -357,8 +569,8 @@
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(212, 85, 58, 0.15);
-            backdrop-filter: blur(10px);
+            background: rgba(212, 85, 58, 0.12);
+            backdrop-filter: blur(12px);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -369,10 +581,7 @@
             transition: opacity 0.35s ease;
         }
 
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal.active { opacity: 1; pointer-events: auto; }
 
         .modal-card {
             background: var(--beige-light);
@@ -386,9 +595,7 @@
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .modal.active .modal-card {
-            transform: scale(1) rotate(0deg);
-        }
+        .modal.active .modal-card { transform: scale(1) rotate(0deg); }
 
         .modal-pic {
             width: 100%;
@@ -401,18 +608,8 @@
             justify-content: center;
         }
 
-        .modal-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .modal-pic svg {
-            width: 48px;
-            height: 48px;
-            opacity: 0.2;
-            stroke: var(--coral);
-        }
+        .modal-pic img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-pic svg { width: 48px; height: 48px; opacity: 0.2; stroke: var(--coral); }
 
         .modal-cap {
             font-family: var(--font-hand);
@@ -446,15 +643,26 @@
             border-radius: 40% 50% 40% 50% / 50% 40% 50% 40%;
         }
 
+        .love-blob:nth-child(1) { --accent: var(--coral); }
+        .love-blob:nth-child(2) { --accent: var(--mustard); }
+        .love-blob:nth-child(3) { --accent: var(--sage); }
+        .love-blob:nth-child(4) { --accent: var(--sky); }
+        .love-blob:nth-child(5) { --accent: var(--pink); }
+        .love-blob:nth-child(6) { --accent: var(--lavender); }
+        .love-blob:nth-child(7) { --accent: var(--mustard); }
+        .love-blob:nth-child(8) { --accent: var(--coral); }
+        .love-blob:nth-child(9) { --accent: var(--sage); }
+        .love-blob:nth-child(10) { --accent: var(--pink); }
+
         .love-blob:hover {
-            border-color: var(--coral);
-            background: var(--coral-soft);
+            border-color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 8%, transparent);
         }
 
         .love-blob svg {
             width: 32px;
             height: 32px;
-            stroke: var(--coral);
+            stroke: var(--accent);
             opacity: 0.35;
             transition: all 0.3s ease;
             stroke-width: 2.5;
@@ -463,13 +671,14 @@
 
         .love-blob:hover svg {
             opacity: 0.9;
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.2) rotate(8deg);
         }
 
         .love-text {
             font-family: var(--font-hand);
             font-size: 1rem;
             font-weight: 700;
+            color: var(--accent);
             margin-top: 8px;
             max-height: 0;
             overflow: hidden;
@@ -483,6 +692,30 @@
         }
 
         /* ============================================
+           SECRET MESSAGE (click all love blobs)
+           ============================================ */
+        .secret-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: var(--coral);
+            color: var(--beige);
+            font-family: var(--font-hand);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+            z-index: 20000;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .secret-banner.show {
+            transform: translateY(0);
+        }
+
+        /* ============================================
            LOVE LETTER
            ============================================ */
         .letter {
@@ -493,15 +726,30 @@
             border: 3px solid var(--coral);
             border-radius: 24px;
             position: relative;
-            box-shadow: 6px 6px 0 var(--coral-muted);
+            box-shadow: 6px 6px 0 rgba(212, 85, 58, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .letter:hover {
+            box-shadow: 8px 8px 0 rgba(212, 85, 58, 0.4);
         }
 
         .letter-doodle {
             position: absolute;
-            top: -20px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
+            top: -22px;
+            right: 28px;
+            width: 55px;
+            height: 55px;
+            animation: doodleDrift 4s ease-in-out infinite alternate;
+        }
+
+        .letter-doodle-left {
+            position: absolute;
+            bottom: -16px;
+            left: 28px;
+            width: 40px;
+            height: 40px;
+            animation: doodleDrift 5s ease-in-out 1s infinite alternate-reverse;
         }
 
         .letter-greeting {
@@ -527,13 +775,14 @@
             text-align: right;
             margin-top: 32px;
             user-select: none;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease;
             display: inline-block;
             float: right;
         }
 
         .signature:hover {
-            transform: rotate(-3deg) scale(1.05);
+            transform: rotate(-3deg) scale(1.08);
+            color: var(--pink);
         }
 
         /* Firework */
@@ -548,7 +797,6 @@
         .fw-dot {
             position: absolute;
             border-radius: 50%;
-            background: var(--coral);
             animation: fwPop 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
@@ -556,6 +804,75 @@
             0% { transform: translate(0,0) scale(0); opacity: 1; }
             60% { opacity: 0.9; }
             100% { transform: var(--end) scale(0); opacity: 0; }
+        }
+
+        /* ============================================
+           KONAMI CODE EASTER EGG
+           ============================================ */
+        .konami-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--coral);
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .konami-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .konami-overlay h2 {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 3rem;
+            color: var(--beige);
+            margin-bottom: 16px;
+        }
+
+        .konami-overlay p {
+            font-family: var(--font-hand);
+            font-size: 1.3rem;
+            color: var(--beige-light);
+            max-width: 400px;
+        }
+
+        .konami-overlay .close-hint {
+            margin-top: 40px;
+            font-family: var(--font-hand);
+            font-size: 0.9rem;
+            opacity: 0.5;
+            color: var(--beige);
+        }
+
+        /* ============================================
+           PROGRESS HEART (scroll indicator)
+           ============================================ */
+        .scroll-heart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-heart.visible { opacity: 1; }
+
+        .scroll-heart svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .scroll-heart .heart-fill {
+            transition: clip-path 0.1s ease;
         }
 
         /* ---- MUSIC ---- */
@@ -582,11 +899,37 @@
             box-shadow: 3px 3px 0 var(--coral);
         }
 
+        .music-btn.playing {
+            opacity: 1;
+            animation: musicPulse 0.6s ease infinite;
+            border-color: var(--mustard);
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .music-btn svg {
             width: 18px;
             height: 18px;
             stroke: var(--coral);
             fill: none;
+        }
+
+        /* ---- DOUBLE-TAP HEART (mobile) ---- */
+        .tap-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            font-size: 2rem;
+            animation: tapHeartPop 1s ease forwards;
+        }
+
+        @keyframes tapHeartPop {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(0.8) translateY(-60px); opacity: 0; }
         }
 
         /* ---- FOOTER ---- */
@@ -618,7 +961,6 @@
             width: 24px;
             height: 24px;
             fill: var(--coral);
-            stroke: none;
         }
 
         @keyframes heartBeat {
@@ -638,6 +980,9 @@
             .tl-item::before { left: -35px; width: 12px; height: 12px; }
             .letter { padding: 36px 26px; }
             .love-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-deco { display: none; }
+            .counter-row { gap: 20px; }
+            .counter-num { font-size: 2.2rem; }
         }
 
         @media (max-width: 480px) {
@@ -653,47 +998,95 @@
 
     <div class="confetti-wrap" id="confetti"></div>
 
-    <!-- Custom cursor: small flower -->
+    <!-- Custom cursor -->
     <div id="cursor">
-        <svg viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="3" fill="#D4553A"/>
-            <circle cx="14" cy="7" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
-            <circle cx="19.9" cy="10.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
-            <circle cx="19.9" cy="17.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
-            <circle cx="14" cy="21" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
-            <circle cx="8.1" cy="17.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
-            <circle cx="8.1" cy="10.5" r="3.5" fill="none" stroke="#D4553A" stroke-width="2"/>
+        <svg viewBox="0 0 30 30" fill="none">
+            <circle cx="15" cy="15" r="3.5" fill="#D4553A"/>
+            <circle cx="15" cy="7" r="4" fill="none" stroke="#D4553A" stroke-width="2"/>
+            <circle cx="21.5" cy="11" r="4" fill="none" stroke="#E3A832" stroke-width="2"/>
+            <circle cx="21.5" cy="19" r="4" fill="none" stroke="#D98BA5" stroke-width="2"/>
+            <circle cx="15" cy="23" r="4" fill="none" stroke="#7B9B68" stroke-width="2"/>
+            <circle cx="8.5" cy="19" r="4" fill="none" stroke="#6BA4C9" stroke-width="2"/>
+            <circle cx="8.5" cy="11" r="4" fill="none" stroke="#9B7EC8" stroke-width="2"/>
         </svg>
     </div>
 
-    <!-- Music easter egg -->
+    <!-- Cursor trail -->
+    <div id="trailContainer"></div>
+
+    <!-- Scroll progress heart -->
+    <div class="scroll-heart" id="scrollHeart">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="none" stroke="#D4553A" stroke-width="1.5"/>
+            <clipPath id="heartClip">
+                <rect x="0" y="24" width="24" height="24" id="heartFillRect"/>
+            </clipPath>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="#D4553A" clip-path="url(#heartClip)"/>
+        </svg>
+    </div>
+
+    <!-- Music button -->
     <div class="music-btn" id="musicBtn">
         <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
         </svg>
     </div>
 
+    <!-- Konami overlay -->
+    <div class="konami-overlay" id="konamiOverlay">
+        <h2>you found it!</h2>
+        <p>du bist genauso neugierig wie ich dich liebe – unendlich.</p>
+        <div class="close-hint">klick irgendwo zum schließen</div>
+    </div>
+
+    <!-- Secret banner -->
+    <div class="secret-banner" id="secretBanner">
+        du hast alle gründe entdeckt – aber es gibt noch tausend mehr.
+    </div>
+
     <!-- ======== HERO ======== -->
     <section class="hero">
-        <!-- Hand-drawn flower SVG -->
-        <svg class="hero-flower" viewBox="0 0 120 160" fill="none">
-            <!-- Stem -->
-            <path d="M60 160 C58 130, 55 110, 60 85" stroke="#D4553A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-            <!-- Leaves -->
-            <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#D4553A" stroke-width="2.5"/>
-            <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#D4553A" stroke-width="2.5"/>
-            <!-- Petals -->
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
-            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#D4553A" stroke-width="2.5"/>
-            <!-- Face -->
+        <!-- Decorative doodles around hero -->
+        <div class="hero-deco hero-deco-1">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path d="M20 2 L23 15 L36 15 L25 23 L29 36 L20 28 L11 36 L15 23 L4 15 L17 15Z" stroke="#E3A832" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+        <div class="hero-deco hero-deco-2">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <circle cx="18" cy="18" r="14" stroke="#D98BA5" stroke-width="2" stroke-dasharray="4 4"/>
+            </svg>
+        </div>
+        <div class="hero-deco hero-deco-3">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M16 4 Q28 16, 16 28 Q4 16, 16 4Z" stroke="#9B7EC8" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+        <div class="hero-deco hero-deco-4">
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none">
+                <path d="M5 17.5 C5 8, 12 2, 17.5 2 C23 2, 30 8, 30 17.5 C30 27, 23 33, 17.5 33 C12 33, 5 27, 5 17.5Z" stroke="#7B9B68" stroke-width="2" fill="none"/>
+                <line x1="17.5" y1="10" x2="17.5" y2="25" stroke="#7B9B68" stroke-width="2"/>
+                <line x1="10" y1="17.5" x2="25" y2="17.5" stroke="#7B9B68" stroke-width="2"/>
+            </svg>
+        </div>
+
+        <!-- Flower (clickable!) -->
+        <svg class="hero-flower" id="heroFlower" viewBox="0 0 120 160" fill="none" style="cursor: pointer;">
+            <path d="M60 160 C58 130, 55 110, 60 85" stroke="#D4553A" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+            <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#D98BA5" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#E3A832" stroke-width="2.5"/>
+            <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#9B7EC8" stroke-width="2.5"/>
             <circle cx="60" cy="48" r="12" fill="#E8DCD0" stroke="#D4553A" stroke-width="2.5"/>
             <circle cx="55" cy="46" r="2" fill="#D4553A"/>
             <circle cx="65" cy="46" r="2" fill="#D4553A"/>
             <path d="M55 52 C57 55, 63 55, 65 52" stroke="#D4553A" stroke-width="2" stroke-linecap="round" fill="none"/>
         </svg>
 
-        <h1 class="hero-title">für greta</h1>
+        <h1 class="hero-title">für <span class="colored">greta</span></h1>
 
         <svg class="hero-doodle-line" viewBox="0 0 100 6" fill="none">
             <path d="M0 3 C10 0, 20 6, 30 3 C40 0, 50 6, 60 3 C70 0, 80 6, 90 3 C95 1, 98 3, 100 3" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
@@ -702,6 +1095,35 @@
         <p class="hero-sub">2 jahre. unzählige momente. eine geschichte.</p>
 
         <div class="hero-scroll"><span>scroll down</span></div>
+    </section>
+
+    <!-- ======== COUNTER (days together) ======== -->
+    <section class="counter-section">
+        <div class="section-heading reveal">
+            <span style="font-family: var(--font-hand); font-size: 1rem; font-weight: 700; font-style: normal; opacity: 0.5; display: block; margin-bottom: 8px;">so weit, so wunderbar</span>
+            das sind wir in zahlen
+        </div>
+        <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#E3A832" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="counter-row reveal">
+            <div class="counter-item">
+                <div class="counter-num c-coral" id="counterDays">730</div>
+                <div class="counter-label">tage</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-num c-mustard" id="counterHours">17520</div>
+                <div class="counter-label">stunden</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-num c-sage">∞</div>
+                <div class="counter-label">schmetterlinge</div>
+            </div>
+            <div class="counter-item">
+                <div class="counter-num c-pink">∞</div>
+                <div class="counter-label">küsse</div>
+            </div>
+        </div>
     </section>
 
     <!-- ======== OUR STORY ======== -->
@@ -713,21 +1135,19 @@
         </svg>
 
         <div class="timeline">
-            <!-- TIMELINE EINTRAG 1: Ersetze Datum und Text -->
+            <!-- TIMELINE EINTRAG 1 -->
             <div class="tl-item reveal">
                 <div class="tl-date">[datum einfügen]</div>
                 <h3 class="tl-title">der anfang</h3>
                 <p class="tl-text">[Hier kommt euer erster gemeinsamer Moment – wie ihr euch kennengelernt habt, euer erstes Date, der erste Blickkontakt...]</p>
             </div>
-
-            <!-- TIMELINE EINTRAG 2: Ersetze mit einem besonderen Moment -->
+            <!-- TIMELINE EINTRAG 2 -->
             <div class="tl-item reveal">
                 <div class="tl-date">[datum einfügen]</div>
                 <h3 class="tl-title">[besonderer moment]</h3>
                 <p class="tl-text">[Beschreibung eines besonderen Moments – ein Urlaub, ein lustiger Moment, etwas das euch zusammengeschweißt hat...]</p>
             </div>
-
-            <!-- TIMELINE EINTRAG 3: Heute -->
+            <!-- TIMELINE EINTRAG 3 -->
             <div class="tl-item reveal">
                 <div class="tl-date">heute</div>
                 <h3 class="tl-title">2 jahre</h3>
@@ -741,61 +1161,43 @@
         <div class="section-label reveal">momente</div>
         <h2 class="section-heading reveal">polaroids</h2>
         <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
-            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D98BA5" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
 
-        <div class="pol-grid reveal">
-            <!-- FOTO 1: Ersetze das SVG mit <img src="foto1.jpg" alt="..."> -->
+        <div class="pol-grid reveal stagger">
+            <!-- FOTO 1: Ersetze SVG mit <img src="foto1.jpg" alt="..."> -->
             <div class="polaroid" data-caption="[euer schönster moment hier]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                 <div class="pol-label">moment 1</div>
             </div>
-
             <!-- FOTO 2 -->
             <div class="polaroid" data-caption="[eine lustige erinnerung]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
                 <div class="pol-label">moment 2</div>
             </div>
-
             <!-- FOTO 3 -->
             <div class="polaroid" data-caption="[ein abenteuer zusammen]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
                 <div class="pol-label">moment 3</div>
             </div>
-
             <!-- FOTO 4 -->
             <div class="polaroid" data-caption="[ein ruhiger moment zu zweit]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
                 <div class="pol-label">moment 4</div>
             </div>
-
             <!-- FOTO 5 -->
             <div class="polaroid" data-caption="[etwas das euch zum lachen bringt]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
                 <div class="pol-label">moment 5</div>
             </div>
-
             <!-- FOTO 6 -->
             <div class="polaroid" data-caption="[ein foto das alles sagt]">
-                <div class="pol-img">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                </div>
+                <div class="pol-img"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
                 <div class="pol-label">moment 6</div>
             </div>
         </div>
     </section>
 
-    <!-- Photo Modal -->
     <div class="modal" id="modal">
         <div class="modal-card">
             <div class="modal-pic" id="modalPic"></div>
@@ -808,13 +1210,11 @@
         <div class="section-label reveal">die kleinen dinge</div>
         <h2 class="section-heading reveal">why i love you</h2>
         <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
-            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#9B7EC8" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
-
         <p style="text-align:center; font-family:var(--font-hand); font-size:1rem; opacity:0.45; margin-bottom:30px;" class="reveal">
-            hover über die symbole...
+            hover über die symbole... klick sie alle an für eine überraschung
         </p>
-
         <div class="love-grid reveal" id="loveGrid"></div>
     </section>
 
@@ -823,13 +1223,17 @@
         <div class="section-label reveal">von herzen</div>
         <h2 class="section-heading reveal">a letter for you</h2>
         <svg class="squiggle reveal" viewBox="0 0 80 12" fill="none">
-            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#D4553A" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#6BA4C9" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
 
         <div class="letter reveal">
-            <!-- Small doodle heart top right -->
-            <svg class="letter-doodle" viewBox="0 0 50 50" fill="none">
-                <path d="M25 45 C15 35, 2 28, 2 18 C2 10, 8 4, 15 4 C19 4, 22 6, 25 10 C28 6, 31 4, 35 4 C42 4, 48 10, 48 18 C48 28, 35 35, 25 45Z" stroke="#D4553A" stroke-width="2.5" fill="none"/>
+            <!-- Heart doodle top right -->
+            <svg class="letter-doodle" viewBox="0 0 55 55" fill="none">
+                <path d="M27 48 C17 38, 2 30, 2 19 C2 10, 9 4, 16 4 C20 4, 24 7, 27 11 C30 7, 34 4, 38 4 C45 4, 52 10, 52 19 C52 30, 37 38, 27 48Z" stroke="#D4553A" stroke-width="2.5"/>
+            </svg>
+            <!-- Star doodle bottom left -->
+            <svg class="letter-doodle-left" viewBox="0 0 40 40" fill="none">
+                <path d="M20 4 L23 15 L34 15 L25 22 L28 33 L20 26 L12 33 L15 22 L6 15 L17 15Z" stroke="#E3A832" stroke-width="2"/>
             </svg>
 
             <div class="letter-greeting">meine liebste greta,</div>
@@ -860,21 +1264,54 @@
     (function() {
         'use strict';
 
-        /* ---- Cursor ---- */
+        const colors = ['#D4553A', '#E3A832', '#7B9B68', '#6BA4C9', '#D98BA5', '#9B7EC8'];
+
+        /* ==== CURSOR + TRAIL ==== */
         const cur = document.getElementById('cursor');
         const isTouch = matchMedia('(pointer: coarse)').matches;
+        const trailDots = [];
+        const trailCount = 8;
+        let mx = -100, my = -100;
 
         if (!isTouch) {
+            // Create trail dots
+            for (let i = 0; i < trailCount; i++) {
+                const d = document.createElement('div');
+                d.className = 'trail-dot';
+                d.style.background = colors[i % colors.length];
+                d.style.width = d.style.height = (6 - i * 0.5) + 'px';
+                document.body.appendChild(d);
+                trailDots.push({ el: d, x: -100, y: -100 });
+            }
+
             document.addEventListener('mousemove', e => {
-                cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                mx = e.clientX; my = e.clientY;
+                cur.style.transform = `translate(${mx}px, ${my}px)`;
             });
+
+            // Smooth trail follow
+            function animateTrail() {
+                let lx = mx, ly = my;
+                trailDots.forEach((dot, i) => {
+                    const speed = 0.25 - i * 0.015;
+                    dot.x += (lx - dot.x) * speed;
+                    dot.y += (ly - dot.y) * speed;
+                    dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
+                    dot.el.style.opacity = 0.4 - i * 0.04;
+                    lx = dot.x; ly = dot.y;
+                });
+                requestAnimationFrame(animateTrail);
+            }
+            animateTrail();
+
+            // Hover detection
             document.addEventListener('mouseover', e => {
-                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, a, button')) {
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower')) {
                     cur.classList.add('hover');
                 }
             });
             document.addEventListener('mouseout', e => {
-                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, a, button')) {
+                if (e.target.closest('.polaroid, .love-blob, .signature, .music-btn, .hero-flower')) {
                     cur.classList.remove('hover');
                 }
             });
@@ -882,35 +1319,128 @@
             cur.style.display = 'none';
         }
 
-        /* ---- Confetti (shapes only, no emoji) ---- */
+        /* ==== DOUBLE-TAP HEARTS (mobile & desktop click) ==== */
+        let lastTap = 0;
+        document.addEventListener('click', e => {
+            const now = Date.now();
+            if (now - lastTap < 400) {
+                spawnTapHeart(e.clientX, e.clientY);
+            }
+            lastTap = now;
+        });
+
+        function spawnTapHeart(x, y) {
+            const h = document.createElement('div');
+            h.className = 'tap-heart';
+            h.style.left = (x - 16) + 'px';
+            h.style.top = (y - 16) + 'px';
+            h.style.color = colors[Math.floor(Math.random() * colors.length)];
+            h.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 1000);
+        }
+
+        /* ==== CONFETTI ==== */
         (function() {
             const wrap = document.getElementById('confetti');
-            const count = 70;
-            for (let i = 0; i < count; i++) {
+            const shapes = ['conf-circle', 'conf-square', 'conf-star'];
+
+            for (let i = 0; i < 90; i++) {
                 const d = document.createElement('div');
-                d.className = 'confetti-dot';
+                d.className = 'confetti-dot ' + shapes[Math.floor(Math.random() * shapes.length)];
                 d.style.left = Math.random() * 100 + '%';
-                d.style.width = d.style.height = (Math.random() * 7 + 3) + 'px';
-                d.style.opacity = Math.random() * 0.5 + 0.4;
-                d.style.background = Math.random() > 0.3 ? '#D4553A' : '#E8DCD0';
+                const size = Math.random() * 8 + 4;
+                d.style.width = d.style.height = size + 'px';
+                d.style.background = colors[Math.floor(Math.random() * colors.length)];
                 d.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
                 d.style.animationDelay = (Math.random() * 1.5) + 's';
-                if (Math.random() > 0.5) {
-                    d.style.borderRadius = '2px';
-                    d.style.transform = `rotate(${Math.random()*45}deg)`;
-                }
                 wrap.appendChild(d);
             }
             setTimeout(() => wrap.remove(), 5500);
         })();
 
-        /* ---- Scroll reveal ---- */
+        /* ==== SCROLL REVEAL + SQUIGGLE DRAW ==== */
         const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    if (e.target.classList.contains('squiggle')) {
+                        e.target.classList.add('drawn');
+                    }
+                }
+            });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-        /* ---- Modal ---- */
+        document.querySelectorAll('.reveal, .squiggle, .stagger').forEach(el => obs.observe(el));
+
+        /* ==== SCROLL PROGRESS HEART ==== */
+        const scrollHeart = document.getElementById('scrollHeart');
+        const heartRect = document.getElementById('heartFillRect');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = Math.min(scrolled / max, 1);
+
+            // Show/hide
+            scrollHeart.classList.toggle('visible', scrolled > 200);
+
+            // Fill heart from bottom
+            const yPos = 24 - (pct * 24);
+            heartRect.setAttribute('y', yPos);
+        }, { passive: true });
+
+        /* ==== HERO FLOWER CLICK EASTER EGG ==== */
+        const flower = document.getElementById('heroFlower');
+        const flowerMessages = [
+            'du bist wundervoll', 'ich liebe dich', 'mein sonnenschein',
+            'für immer', 'mein herz gehört dir', 'du bist die beste',
+            'ich vermisse dich jetzt schon', 'alles begann mit dir'
+        ];
+        let flowerMsgIdx = 0;
+
+        flower.addEventListener('click', () => {
+            flower.style.animation = 'none';
+            flower.offsetHeight; // reflow
+            flower.style.animation = 'flowerSpin 0.6s ease, sway 4s ease-in-out 0.6s infinite';
+
+            // Float a message
+            const msg = document.createElement('div');
+            msg.className = 'flower-msg';
+            msg.textContent = flowerMessages[flowerMsgIdx % flowerMessages.length];
+            msg.style.color = colors[flowerMsgIdx % colors.length];
+            msg.style.left = (flower.getBoundingClientRect().left + flower.offsetWidth / 2 - 60) + 'px';
+            msg.style.top = (flower.getBoundingClientRect().top - 10) + 'px';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+            flowerMsgIdx++;
+        });
+
+        /* ==== COUNTER ANIMATION ==== */
+        function animateCounter(el, target, duration) {
+            const start = performance.now();
+            const from = 0;
+            function step(now) {
+                const pct = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - pct, 3);
+                el.textContent = Math.floor(from + (target - from) * eased).toLocaleString('de-DE');
+                if (pct < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        const counterObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    animateCounter(document.getElementById('counterDays'), 730, 2000);
+                    animateCounter(document.getElementById('counterHours'), 17520, 2500);
+                    counterObs.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+        counterObs.observe(document.querySelector('.counter-row'));
+
+        /* ==== POLAROID MODAL ==== */
         const modal = document.getElementById('modal');
         const modalPic = document.getElementById('modalPic');
         const modalCap = document.getElementById('modalCap');
@@ -920,47 +1450,53 @@
                 const img = p.querySelector('.pol-img img');
                 const svg = p.querySelector('.pol-img svg');
                 modalPic.innerHTML = '';
-                if (img) {
-                    modalPic.appendChild(img.cloneNode());
-                } else if (svg) {
-                    const clone = svg.cloneNode(true);
-                    clone.style.width = '48px';
-                    clone.style.height = '48px';
-                    modalPic.appendChild(clone);
-                }
+                if (img) modalPic.appendChild(img.cloneNode());
+                else if (svg) { const c = svg.cloneNode(true); c.style.width = '48px'; c.style.height = '48px'; modalPic.appendChild(c); }
                 modalCap.textContent = p.dataset.caption;
                 modal.classList.add('active');
             });
         });
-
         modal.addEventListener('click', () => modal.classList.remove('active'));
 
-        /* ---- Love reasons ---- */
+        /* ==== LOVE REASONS + SECRET ==== */
         (function() {
             const grid = document.getElementById('loveGrid');
-            // GRÜNDE: Ersetze die Platzhalter-Texte mit deinen persönlichen Gründen
+            const banner = document.getElementById('secretBanner');
+            // GRÜNDE: Ersetze die Platzhalter-Texte
             const items = [
                 { d: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', t: '[dein lachen]' },
-                { d: 'M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z', t: '[deine umarmungen]' },
-                { d: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01', t: '[wie du mich anschaust]' },
+                { d: 'M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26Z', t: '[deine umarmungen]' },
+                { d: 'M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01', t: '[wie du mich anschaust]' },
                 { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z', t: '[deine stimme]' },
                 { d: 'M9 18V5l12-2v13M6 18a3 3 0 100-6 3 3 0 000 6zM18 16a3 3 0 100-6 3 3 0 000 6z', t: '[dein humor]' },
-                { d: 'M12 3v1m0 16v1m-9-9h1m16 0h1m-2.636-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z', t: '[wie du tanzt]' },
+                { d: 'M12 3v1m0 16v1m-9-9h1m16 0h1m-2.6-6.4l-.7.7M6.3 17.7l-.7.7m0-12.7l.7.7m11.3 11.3l.7.7M12 8a4 4 0 100 8 4 4 0 000-8z', t: '[wie du tanzt]' },
                 { d: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3', t: '[deine güte]' },
                 { d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', t: '[dass du immer da bist]' },
-                { d: 'M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z', t: '[wie du mich zum lachen bringst]' },
+                { d: 'M18 3a3 3 0 0 0-3 3v12a3 3 0 003 3 3 3 0 003-3 3 3 0 00-3-3H6a3 3 0 00-3 3 3 3 0 003 3 3 3 0 003-3V6a3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3h12a3 3 0 003-3 3 3 0 00-3-3z', t: '[wie du mich zum lachen bringst]' },
                 { d: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z', t: '[einfach alles an dir]' },
             ];
 
-            items.forEach(it => {
+            const clicked = new Set();
+
+            items.forEach((it, i) => {
                 const el = document.createElement('div');
                 el.className = 'love-blob';
                 el.innerHTML = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="${it.d}"/></svg><div class="love-text">${it.t}</div>`;
+                el.addEventListener('click', () => {
+                    clicked.add(i);
+                    el.style.borderColor = getComputedStyle(el).getPropertyValue('--accent');
+                    el.querySelector('svg').style.opacity = '0.9';
+                    // Check if all clicked
+                    if (clicked.size === items.length) {
+                        banner.classList.add('show');
+                        setTimeout(() => banner.classList.remove('show'), 4000);
+                    }
+                });
                 grid.appendChild(el);
             });
         })();
 
-        /* ---- Signature easter egg ---- */
+        /* ==== SIGNATURE FIREWORK ==== */
         (function() {
             const sig = document.getElementById('sig');
             const fw = document.getElementById('fwWrap');
@@ -977,61 +1513,88 @@
                 fw.innerHTML = '';
                 const cx = innerWidth / 2, cy = innerHeight / 2;
 
-                for (let w = 0; w < 3; w++) {
+                for (let w = 0; w < 4; w++) {
                     setTimeout(() => {
-                        for (let i = 0; i < 28; i++) {
+                        for (let i = 0; i < 30; i++) {
                             const p = document.createElement('div');
                             p.className = 'fw-dot';
-                            const ox = (Math.random() - 0.5) * 160 * w;
-                            const oy = (Math.random() - 0.5) * 80 * w;
+                            const ox = (Math.random() - 0.5) * 180 * w;
+                            const oy = (Math.random() - 0.5) * 100 * w;
                             p.style.left = (cx + ox) + 'px';
                             p.style.top = (cy + oy) + 'px';
-                            const sz = Math.random() * 8 + 3;
+                            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                            const sz = Math.random() * 9 + 3;
                             p.style.width = p.style.height = sz + 'px';
-                            const a = (Math.PI * 2 * i) / 28 + Math.random() * 0.3;
-                            const d = Math.random() * 180 + 60;
+                            const a = (Math.PI * 2 * i) / 30 + Math.random() * 0.3;
+                            const d = Math.random() * 200 + 70;
                             p.style.setProperty('--end', `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px)`);
                             p.style.animationDelay = (Math.random() * 0.15) + 's';
                             fw.appendChild(p);
                         }
-                    }, w * 250);
+                    }, w * 200);
                 }
-
-                setTimeout(() => { fw.style.display = 'none'; fw.innerHTML = ''; }, 2200);
+                setTimeout(() => { fw.style.display = 'none'; fw.innerHTML = ''; }, 2500);
             }
         })();
 
-        /* ---- Music ---- */
+        /* ==== KONAMI CODE ==== */
+        (function() {
+            const code = [38,38,40,40,37,39,37,39,66,65]; // up up down down left right left right B A
+            let pos = 0;
+            const overlay = document.getElementById('konamiOverlay');
+
+            document.addEventListener('keydown', e => {
+                if (e.keyCode === code[pos]) {
+                    pos++;
+                    if (pos === code.length) {
+                        pos = 0;
+                        overlay.classList.add('active');
+                    }
+                } else {
+                    pos = 0;
+                }
+            });
+
+            overlay.addEventListener('click', () => overlay.classList.remove('active'));
+        })();
+
+        /* ==== MUSIC ==== */
         (function() {
             const btn = document.getElementById('musicBtn');
-            let ctx;
+            let ctx, playing = false;
 
             btn.addEventListener('click', () => {
                 if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [
-                    { f: 523.25, d: 0.28, t: 0 },
-                    { f: 659.25, d: 0.28, t: 0.2 },
-                    { f: 783.99, d: 0.28, t: 0.4 },
-                    { f: 1046.5, d: 0.5, t: 0.6 },
-                    { f: 783.99, d: 0.22, t: 1.0 },
-                    { f: 659.25, d: 0.22, t: 1.15 },
-                    { f: 523.25, d: 0.6, t: 1.3 },
+
+                // A sweet melody in C major
+                const melody = [
+                    { f: 523.25, d: 0.3, t: 0 },     // C5
+                    { f: 587.33, d: 0.15, t: 0.22 },  // D5
+                    { f: 659.25, d: 0.3, t: 0.37 },   // E5
+                    { f: 783.99, d: 0.2, t: 0.6 },    // G5
+                    { f: 659.25, d: 0.15, t: 0.78 },  // E5
+                    { f: 783.99, d: 0.15, t: 0.9 },   // G5
+                    { f: 1046.5, d: 0.6, t: 1.05 },   // C6
+                    { f: 783.99, d: 0.3, t: 1.55 },   // G5
+                    { f: 659.25, d: 0.3, t: 1.8 },    // E5
+                    { f: 523.25, d: 0.7, t: 2.05 },   // C5
                 ];
 
                 const now = ctx.currentTime;
-                notes.forEach(n => {
+                melody.forEach(n => {
                     const o = ctx.createOscillator();
                     const g = ctx.createGain();
                     o.type = 'triangle';
                     o.frequency.value = n.f;
                     g.gain.setValueAtTime(0, now + n.t);
-                    g.gain.linearRampToValueAtTime(0.07, now + n.t + 0.03);
+                    g.gain.linearRampToValueAtTime(0.06, now + n.t + 0.02);
                     g.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
-                    o.connect(g);
-                    g.connect(ctx.destination);
-                    o.start(now + n.t);
-                    o.stop(now + n.t + n.d);
+                    o.connect(g); g.connect(ctx.destination);
+                    o.start(now + n.t); o.stop(now + n.t + n.d);
                 });
+
+                btn.classList.add('playing');
+                setTimeout(() => btn.classList.remove('playing'), 2800);
             });
         })();
 
