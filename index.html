@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>für greta</title>
+    <meta name="description" content="Happy 2nd Anniversary, Greta. Eine Webseite nur für dich.">
+    <meta name="theme-color" content="#C4553F">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#10084;</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -579,7 +582,7 @@
             font-family: var(--font-hand);
             font-size: 1.15rem;
             font-weight: 700;
-            position: fixed;
+            position: absolute;
             pointer-events: none;
             opacity: 0;
             animation: floatMsg 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -728,6 +731,8 @@
         }
 
         .polaroid {
+            position: relative;
+            overflow: visible;
             background: var(--beige-light);
             border: 2.5px solid var(--coral);
             border-radius: 16px;
@@ -1192,6 +1197,7 @@
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 4px 16px rgba(194, 138, 138, 0.15);
             white-space: nowrap;
+            max-width: calc(100vw - 48px);
         }
 
         .idle-bubble.show {
@@ -1214,7 +1220,7 @@
             position: fixed;
             inset: 0;
             background: linear-gradient(135deg, var(--rose) 0%, var(--coral) 100%);
-            z-index: 100000;
+            z-index: 100001;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1271,11 +1277,6 @@
         .polaroid:nth-child(4)::before { transform: translateX(-50%) rotate(2deg); width: 36px; }
         .polaroid:nth-child(5)::before { transform: translateX(-50%) rotate(-3deg); }
         .polaroid:nth-child(6)::before { transform: translateX(-50%) rotate(1deg); width: 44px; }
-
-        .polaroid {
-            position: relative;
-            overflow: visible;
-        }
 
         /* ---- COUNTER ITEM CLICK BOUNCE ---- */
         .counter-item.bounced {
@@ -1421,31 +1422,31 @@
 
                 <div class="roller-row" id="rollerRow">
                     <div class="roller">
-                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
                         <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
                     <div class="roller">
-                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
                         <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
                     <div class="roller">
-                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
                         <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
                     <div class="roller">
-                        <button class="roller-btn roller-up"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
                         <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
                     </div>
                 </div>
             </div>
         </div>
 
         <button class="lock-btn" id="lockBtn">öffnen</button>
-        <div class="lock-hint" id="lockHint">Falsches Passwort! Hinweis: Unser Jahrestag</div>
+        <div class="lock-hint" id="lockHint">fast! hinweis: unser jahrestag (TTMM)</div>
     </div>
 
     <!-- Custom cursor (outside app-content so it works on lock screen too) -->
@@ -1543,7 +1544,7 @@
         </svg>
 
         <p class="hero-sub">2 jahre. unzählige momente. eine geschichte.</p>
-        <div class="hero-scroll"><span>scroll down</span></div>
+        <div class="hero-scroll"><span>nach unten scrollen</span></div>
     </section>
 
     <!-- Section divider -->
@@ -1758,6 +1759,8 @@
     (function() {
         'use strict';
 
+        let siteUnlocked = false;
+
         /* ============================================
            LOCK SCREEN – Heart Padlock
            ============================================ */
@@ -1872,6 +1875,7 @@
                 const correct = values.every((v, i) => v === CODE[i]);
                 if (correct) {
                     locked = false;
+                    siteUnlocked = true;
                     lockScreen.classList.add('unlocked');
                     appContent.classList.remove('locked');
                     setTimeout(() => { lockScreen.remove(); launchConfetti(); }, 800);
@@ -1936,6 +1940,7 @@
         /* ==== DOUBLE-TAP HEARTS ==== */
         let lastTap = 0;
         document.addEventListener('click', e => {
+            if (!siteUnlocked) return;
             const now = Date.now();
             if (now - lastTap < 400) {
                 const h = document.createElement('div');
@@ -2020,7 +2025,6 @@
             const r = flower.getBoundingClientRect();
             msg.style.left = (r.left + r.width / 2 - 60) + 'px';
             msg.style.top = (r.top - 10 + window.scrollY) + 'px';
-            msg.style.position = 'absolute';
             document.body.appendChild(msg);
             setTimeout(() => msg.remove(), 2000);
             mIdx++;
@@ -2040,8 +2044,13 @@
         const cObs = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
-                    animCount(document.getElementById('counterDays'), 730, 2000);
-                    animCount(document.getElementById('counterHours'), 17520, 2500);
+                    const start = new Date(2024, 3, 25); // 25. April 2024 (month is 0-indexed)
+                    const now = new Date();
+                    const diffMs = now - start;
+                    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    const hours = days * 24;
+                    animCount(document.getElementById('counterDays'), days, 2000);
+                    animCount(document.getElementById('counterHours'), hours, 2500);
                     cObs.disconnect();
                 }
             });
@@ -2147,6 +2156,7 @@
             let pos = 0;
             const ov = document.getElementById('konamiOverlay');
             document.addEventListener('keydown', e => {
+                if (!siteUnlocked) return;
                 if (e.keyCode === code[pos]) { pos++; if (pos === code.length) { pos = 0; ov.classList.add('active'); } } else { pos = 0; }
             });
             ov.addEventListener('click', () => ov.classList.remove('active'));
@@ -2193,6 +2203,7 @@
             let typed = '';
             const ov = document.getElementById('typedOverlay');
             document.addEventListener('keydown', e => {
+                if (!siteUnlocked) return;
                 if (e.key.length === 1) {
                     typed += e.key.toLowerCase();
                     if (typed.length > target.length) typed = typed.slice(-target.length);
@@ -2214,6 +2225,7 @@
             const target = 'love';
             let typed = '';
             document.addEventListener('keydown', e => {
+                if (!siteUnlocked) return;
                 if (e.key.length === 1) {
                     typed += e.key.toLowerCase();
                     if (typed.length > target.length) typed = typed.slice(-target.length);
@@ -2282,6 +2294,7 @@
             const sparkleTargets = '.polaroid, .love-blob, .hero-flower, .music-btn, .tl-item';
             let lastSparkle = 0;
             document.addEventListener('mousemove', e => {
+                if (!siteUnlocked) return;
                 const now = Date.now();
                 if (now - lastSparkle < 120) return;
                 const target = e.target.closest(sparkleTargets);
@@ -2377,14 +2390,14 @@
 
         /* ==== PAGE TITLE CHANGES ON SCROLL ==== */
         (function() {
-            const sections = ['für greta', 'unsere zahlen', 'our story', 'polaroids', 'why i love you', 'a letter for you', 'happy anniversary'];
+            const titles = ['für greta', 'unsere zahlen', 'our story', 'polaroids', 'why i love you', 'a letter for you'];
             const sectionEls = document.querySelectorAll('section');
             window.addEventListener('scroll', () => {
                 let current = 0;
                 sectionEls.forEach((s, i) => {
                     if (s.getBoundingClientRect().top < innerHeight / 2) current = i;
                 });
-                document.title = sections[Math.min(current, sections.length - 1)] || 'für greta';
+                document.title = titles[Math.min(current, titles.length - 1)] || 'für greta';
             }, { passive: true });
         })();
 
@@ -2405,6 +2418,7 @@
                 bubble.classList.remove('show');
                 clearTimeout(idleTimer);
                 idleTimer = setTimeout(() => {
+                    if (!siteUnlocked) return;
                     bubble.textContent = idleMsgs[idleMsgIdx % idleMsgs.length];
                     idleMsgIdx++;
                     bubble.classList.add('show');
