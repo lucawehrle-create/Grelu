@@ -43,8 +43,10 @@
             color: var(--coral);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            background-image: radial-gradient(circle at 25% 25%, rgba(196,85,63,0.015) 0%, transparent 50%),
-                              radial-gradient(circle at 75% 75%, rgba(194,138,138,0.02) 0%, transparent 50%);
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(196,85,63,0.015) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(194,138,138,0.02) 0%, transparent 50%),
+                radial-gradient(circle at 60% 40%, rgba(201,168,122,0.015) 0%, transparent 40%);
         }
 
         ::selection { background: var(--coral); color: var(--beige); }
@@ -410,6 +412,29 @@
             text-align: center;
             margin-bottom: 18px;
             line-height: 1.12;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transform: scaleX(0);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border-radius: 2px;
+        }
+
+        .section-heading:hover::after {
+            opacity: 0.15;
+            transform: scaleX(1);
         }
 
         .squiggle {
@@ -498,10 +523,20 @@
         }
 
         .hero-title .colored {
-            color: var(--rose);
             display: inline-block;
             opacity: 0;
             animation: fadeUp 0.8s ease 0.8s forwards;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--rose) 40%, var(--pink) 70%, var(--coral) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeUp 0.8s ease 0.8s forwards, shimmerText 6s ease-in-out 2s infinite;
+        }
+
+        @keyframes shimmerText {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
         }
 
         .hero-sub {
@@ -511,6 +546,14 @@
             margin-top: 20px;
             opacity: 0;
             animation: fadeUp 0.8s ease 1.2s forwards;
+            position: relative;
+            padding-bottom: 2px;
+            border-bottom: 2px dashed transparent;
+            transition: border-color 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .hero-sub:hover {
+            border-bottom-color: rgba(196, 85, 63, 0.2);
         }
 
         .hero-doodle-line {
@@ -529,20 +572,53 @@
             position: absolute;
             bottom: 40px;
             font-family: var(--font-hand);
-            font-size: 1rem;
+            font-size: 0.95rem;
             opacity: 0;
             animation: fadeUp 0.8s ease 2s forwards;
             letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
 
         .hero-scroll span {
             display: block;
-            animation: bob 2.5s ease-in-out infinite;
         }
 
-        @keyframes bob {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
+        .hero-scroll-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .hero-scroll-arrow svg {
+            width: 18px;
+            height: 10px;
+            stroke: var(--coral);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .hero-scroll-arrow svg:nth-child(1) {
+            opacity: 0.2;
+            animation: scrollChevron 2s ease-in-out infinite;
+        }
+        .hero-scroll-arrow svg:nth-child(2) {
+            opacity: 0.5;
+            animation: scrollChevron 2s ease-in-out 0.15s infinite;
+        }
+        .hero-scroll-arrow svg:nth-child(3) {
+            opacity: 0.8;
+            animation: scrollChevron 2s ease-in-out 0.3s infinite;
+        }
+
+        @keyframes scrollChevron {
+            0%, 100% { transform: translateY(0); opacity: inherit; }
+            50% { transform: translateY(4px); opacity: 1; }
         }
 
         /* Hero deco doodles */
@@ -623,7 +699,7 @@
 
         .counter-item:hover {
             transform: translateY(-4px);
-            background: rgba(196, 85, 63, 0.04);
+            background: color-mix(in srgb, currentColor 4%, transparent);
         }
 
         .counter-num {
@@ -637,7 +713,7 @@
             font-family: var(--font-hand);
             font-size: 1rem;
             font-weight: 700;
-            opacity: 0.45;
+            opacity: 0.55;
             margin-top: 6px;
             letter-spacing: 0.5px;
         }
@@ -645,6 +721,16 @@
         .c-coral { color: var(--coral); }
         .c-rose { color: var(--rose); }
         .c-warm { color: var(--warm); }
+
+        .infinity-pulse {
+            animation: infinityPulse 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes infinityPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
 
         /* ============================================
            TIMELINE
@@ -662,6 +748,13 @@
             border-radius: 3px;
             background: linear-gradient(to bottom, var(--coral), var(--rose), var(--warm));
             opacity: 0.2;
+            transform-origin: top;
+            transform: scaleY(0);
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .timeline.line-drawn::before {
+            transform: scaleY(1);
         }
 
         .tl-item {
@@ -849,6 +942,14 @@
             font-weight: 700;
         }
 
+        .modal-close-hint {
+            font-family: var(--font-hand);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 16px;
+            opacity: 0.3;
+        }
+
         /* ============================================
            WHY I LOVE YOU
            ============================================ */
@@ -885,7 +986,7 @@
 
         .love-blob:hover {
             border-color: var(--accent);
-            background: rgba(196, 85, 63, 0.04);
+            background: color-mix(in srgb, var(--accent) 6%, transparent);
             transform: scale(1.05) rotate(-2deg);
         }
 
@@ -946,12 +1047,31 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 52px 44px;
-            background: linear-gradient(170deg, var(--beige-light) 0%, #F5EDE2 100%);
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent,
+                    transparent 31px,
+                    rgba(196, 85, 63, 0.06) 31px,
+                    rgba(196, 85, 63, 0.06) 32px
+                ),
+                linear-gradient(170deg, var(--beige-light) 0%, #F5EDE2 100%);
             border: 3px solid var(--coral);
             border-radius: 24px;
             position: relative;
             box-shadow: 8px 8px 0 rgba(196, 85, 63, 0.15), 0 12px 40px rgba(0,0,0,0.06);
             transition: box-shadow 0.4s ease, transform 0.4s ease;
+        }
+
+        .letter::after {
+            content: '';
+            position: absolute;
+            top: 44px;
+            left: 38px;
+            bottom: 24px;
+            width: 1.5px;
+            background: rgba(196, 85, 63, 0.08);
+            border-radius: 1px;
         }
 
         .letter:hover {
@@ -1170,12 +1290,26 @@
             color: var(--rose);
             padding: 16px 24px;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
             margin-top: -20px;
             margin-bottom: 20px;
+            transform: translateY(10px);
         }
 
-        .bottom-msg.visible { opacity: 0.6; }
+        .bottom-msg.visible {
+            opacity: 0.6;
+            transform: translateY(0);
+        }
+
+        .bottom-msg::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--rose), transparent);
+            margin: 0 auto 12px;
+            border-radius: 1px;
+        }
 
         /* ---- IDLE BUBBLE ---- */
         .idle-bubble {
@@ -1267,16 +1401,17 @@
             transform: translateX(-50%) rotate(-2deg);
             width: 40px;
             height: 14px;
-            background: rgba(201, 168, 122, 0.35);
             border-radius: 2px;
             z-index: 2;
+            opacity: 0.3;
         }
 
-        .polaroid:nth-child(2)::before { transform: translateX(-50%) rotate(3deg); }
-        .polaroid:nth-child(3)::before { transform: translateX(-50%) rotate(-1deg); }
-        .polaroid:nth-child(4)::before { transform: translateX(-50%) rotate(2deg); width: 36px; }
-        .polaroid:nth-child(5)::before { transform: translateX(-50%) rotate(-3deg); }
-        .polaroid:nth-child(6)::before { transform: translateX(-50%) rotate(1deg); width: 44px; }
+        .polaroid:nth-child(1)::before { background: var(--coral); }
+        .polaroid:nth-child(2)::before { background: var(--mustard); transform: translateX(-50%) rotate(3deg); }
+        .polaroid:nth-child(3)::before { background: var(--sage); transform: translateX(-50%) rotate(-1deg); }
+        .polaroid:nth-child(4)::before { background: var(--sky); transform: translateX(-50%) rotate(2deg); width: 36px; }
+        .polaroid:nth-child(5)::before { background: var(--pink); transform: translateX(-50%) rotate(-3deg); }
+        .polaroid:nth-child(6)::before { background: var(--lavender); transform: translateX(-50%) rotate(1deg); width: 44px; }
 
         /* ---- COUNTER ITEM CLICK BOUNCE ---- */
         .counter-item.bounced {
@@ -1301,8 +1436,9 @@
         /* ---- FOOTER ---- */
         footer {
             text-align: center;
-            padding: 100px 28px 60px;
+            padding: 100px 28px 80px;
             position: relative;
+            background: radial-gradient(ellipse at 50% 80%, rgba(196,85,63,0.03) 0%, transparent 70%);
         }
 
         footer::before {
@@ -1311,9 +1447,9 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
+            width: 120px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--rose), transparent);
+            background: linear-gradient(90deg, transparent, var(--rose), var(--coral), var(--rose), transparent);
             border-radius: 1px;
         }
 
@@ -1325,18 +1461,26 @@
 
         footer .foot-sub {
             font-family: var(--font-hand);
-            font-size: 1.05rem;
-            margin-top: 8px;
-            opacity: 0.45;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            opacity: 0.5;
+            letter-spacing: 0.5px;
         }
 
         .foot-heart {
             display: inline-block;
-            margin-top: 24px;
+            margin-top: 28px;
             animation: heartBeat 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 2px 6px rgba(196, 85, 63, 0.2));
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .foot-heart svg { width: 28px; height: 28px; fill: var(--coral); }
+        .foot-heart:hover {
+            animation-play-state: paused;
+            transform: scale(1.3);
+        }
+
+        .foot-heart svg { width: 32px; height: 32px; fill: var(--coral); }
 
         @keyframes heartBeat {
             0%, 100% { transform: scale(1); }
@@ -1354,6 +1498,7 @@
             .tl-item { padding: 24px; }
             .tl-item::before { left: -35px; width: 12px; height: 12px; }
             .letter { padding: 36px 28px; }
+            .letter::after { left: 22px; top: 28px; }
             .love-grid { grid-template-columns: repeat(2, 1fr); }
             .hero-deco { display: none; }
             .counter-row { gap: 24px; }
@@ -1377,7 +1522,9 @@
             .lock-title { font-size: 1.6rem; }
             .lock-deco { display: none; }
             .letter { padding: 28px 20px; }
+            .letter::after { left: 14px; top: 20px; }
             .letter-greeting { font-size: 1.5rem; }
+            .idle-bubble { white-space: normal; text-align: center; }
         }
     </style>
 </head>
@@ -1544,7 +1691,14 @@
         </svg>
 
         <p class="hero-sub">2 jahre. unzählige momente. eine geschichte.</p>
-        <div class="hero-scroll"><span>nach unten scrollen</span></div>
+        <div class="hero-scroll">
+            <span>nach unten scrollen</span>
+            <div class="hero-scroll-arrow">
+                <svg viewBox="0 0 18 10"><path d="M2 2l7 6 7-6"/></svg>
+                <svg viewBox="0 0 18 10"><path d="M2 2l7 6 7-6"/></svg>
+                <svg viewBox="0 0 18 10"><path d="M2 2l7 6 7-6"/></svg>
+            </div>
+        </div>
     </section>
 
     <!-- Section divider -->
@@ -1562,20 +1716,20 @@
             <path d="M0 6 C8 1, 16 11, 24 6 C32 1, 40 11, 48 6 C56 1, 64 11, 72 6 L80 6" stroke="#C9A87A" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         <div class="counter-row reveal">
-            <div class="counter-item">
-                <div class="counter-num c-coral" id="counterDays">730</div>
+            <div class="counter-item c-coral">
+                <div class="counter-num" id="counterDays">730</div>
                 <div class="counter-label">tage</div>
             </div>
-            <div class="counter-item">
-                <div class="counter-num c-rose" id="counterHours">17520</div>
+            <div class="counter-item c-rose">
+                <div class="counter-num" id="counterHours">17520</div>
                 <div class="counter-label">stunden</div>
             </div>
-            <div class="counter-item">
-                <div class="counter-num c-warm">&infin;</div>
+            <div class="counter-item c-warm">
+                <div class="counter-num infinity-pulse">&infin;</div>
                 <div class="counter-label">schmetterlinge</div>
             </div>
-            <div class="counter-item">
-                <div class="counter-num c-rose">&infin;</div>
+            <div class="counter-item c-rose">
+                <div class="counter-num infinity-pulse">&infin;</div>
                 <div class="counter-label">küsse</div>
             </div>
         </div>
@@ -1671,6 +1825,7 @@
         <div class="modal-card">
             <div class="modal-pic" id="modalPic"></div>
             <div class="modal-cap" id="modalCap"></div>
+            <div class="modal-close-hint">klick zum schließen</div>
         </div>
     </div>
 
@@ -1980,10 +2135,11 @@
                 if (e.isIntersecting) {
                     e.target.classList.add('visible');
                     if (e.target.classList.contains('squiggle')) e.target.classList.add('drawn');
+                    if (e.target.classList.contains('timeline')) e.target.classList.add('line-drawn');
                 }
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal, .squiggle, .stagger').forEach(el => obs.observe(el));
+        document.querySelectorAll('.reveal, .squiggle, .stagger, .timeline').forEach(el => obs.observe(el));
 
         /* ==== SCROLL PROGRESS HEART ==== */
         const scrollHeart = document.getElementById('scrollHeart');
