@@ -2007,9 +2007,199 @@
         @supports (min-height: 100svh) {
             .hero { min-height: 100svh; }
         }
+
+        /* ============================================
+           LOADING SCREEN
+           ============================================ */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999999;
+            background: var(--beige);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-flower {
+            width: 60px;
+            height: 60px;
+            animation: loadSpin 2s ease-in-out infinite;
+        }
+
+        @keyframes loadSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .loading-text {
+            font-family: var(--font-hand);
+            font-size: 1.1rem;
+            color: var(--coral);
+            margin-top: 20px;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: loadDots 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadDots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+        }
+
+        /* ============================================
+           PARALLAX SECTIONS
+           ============================================ */
+        .parallax-section {
+            will-change: transform;
+        }
+
+        .parallax-element {
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        .hero-flower {
+            will-change: transform;
+        }
+
+        /* ============================================
+           LIGHTBOX NAVIGATION
+           ============================================ */
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--coral);
+            background: var(--beige-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .modal-nav:hover {
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 4px 4px 0 var(--coral);
+        }
+
+        .modal-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .modal-nav svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--coral);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .modal-prev { left: 16px; }
+        .modal-next { right: 16px; }
+
+        .modal-counter {
+            font-family: var(--font-hand);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 8px;
+            opacity: 0.4;
+            color: var(--coral);
+        }
+
+        .modal-card {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+
+        .modal-card.slide-left {
+            animation: slideLeft 0.35s ease forwards;
+        }
+
+        .modal-card.slide-right {
+            animation: slideRight 0.35s ease forwards;
+        }
+
+        @keyframes slideLeft {
+            0% { transform: translateX(0) scale(1); opacity: 1; }
+            40% { transform: translateX(-60px) scale(0.95); opacity: 0; }
+            60% { transform: translateX(60px) scale(0.95); opacity: 0; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes slideRight {
+            0% { transform: translateX(0) scale(1); opacity: 1; }
+            40% { transform: translateX(60px) scale(0.95); opacity: 0; }
+            60% { transform: translateX(-60px) scale(0.95); opacity: 0; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        .modal-close-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .swipe-hint {
+            font-family: var(--font-hand);
+            font-size: 0.75rem;
+            opacity: 0.25;
+            white-space: nowrap;
+        }
+
+        @media (pointer: fine) {
+            .modal-nav { cursor: none; }
+        }
+
+        @media (max-width: 480px) {
+            .modal-nav { width: 36px; height: 36px; }
+            .modal-nav svg { width: 14px; height: 14px; }
+            .modal-prev { left: 8px; }
+            .modal-next { right: 8px; }
+            .modal-counter { font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body class="is-locked">
+
+    <!-- ============================================
+         LOADING SCREEN
+         ============================================ -->
+    <div class="loading-screen" id="loadingScreen">
+        <svg class="loading-flower" viewBox="0 0 60 60" fill="none">
+            <ellipse cx="30" cy="24" rx="8" ry="11" stroke="#D98BA5" stroke-width="2"/>
+            <ellipse cx="30" cy="24" rx="8" ry="11" transform="rotate(72 30 24)" stroke="#E3A832" stroke-width="2"/>
+            <ellipse cx="30" cy="24" rx="8" ry="11" transform="rotate(144 30 24)" stroke="#9B7EC8" stroke-width="2"/>
+            <ellipse cx="30" cy="24" rx="8" ry="11" transform="rotate(216 30 24)" stroke="#7B9B68" stroke-width="2"/>
+            <ellipse cx="30" cy="24" rx="8" ry="11" transform="rotate(288 30 24)" stroke="#6BA4C9" stroke-width="2"/>
+            <circle cx="30" cy="24" r="5" fill="#EBE1D5" stroke="#C4553F" stroke-width="2"/>
+        </svg>
+        <div class="loading-text">wird geladen<span class="loading-dots"></span></div>
+    </div>
 
     <!-- ============================================
          LOCK SCREEN
@@ -2386,10 +2576,17 @@
     </section>
 
     <div class="modal" id="modal">
-        <div class="modal-card">
+        <button class="modal-nav modal-prev" id="modalPrev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="modal-nav modal-next" id="modalNext"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <div class="modal-card" id="modalCard">
             <div class="modal-pic" id="modalPic"></div>
             <div class="modal-cap" id="modalCap"></div>
-            <div class="modal-close-hint">klick zum schließen</div>
+            <div class="modal-counter" id="modalCounter"></div>
+            <div class="modal-close-hint">
+                <span class="swipe-hint">&larr; wischen</span>
+                <span>klick zum schließen</span>
+                <span class="swipe-hint">wischen &rarr;</span>
+            </div>
         </div>
     </div>
 
@@ -2569,6 +2766,24 @@
         'use strict';
 
         let siteUnlocked = false;
+
+        /* ============================================
+           LOADING SCREEN – Wait for fonts
+           ============================================ */
+        (function initLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+
+            function hideLoading() {
+                loadingScreen.classList.add('hidden');
+                setTimeout(() => loadingScreen.remove(), 700);
+            }
+
+            // Wait for fonts, with 3s timeout fallback
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(hideLoading);
+            }
+            setTimeout(hideLoading, 3000); // fallback
+        })();
 
         /* ============================================
            LOCK SCREEN – Heart Padlock
@@ -2805,23 +3020,109 @@
         const scrollHeart = document.getElementById('scrollHeart');
         const heartRect = document.getElementById('heartFillRect');
 
-        /* ==== SUBTLE PARALLAX FOR SECTION DIVIDERS ==== */
+        /* ==== SMOOTH PARALLAX + SCROLL EFFECTS ==== */
         const dividers = document.querySelectorAll('.section-divider');
+        const heroFlowerEl = document.querySelector('.hero-flower');
+        const heroTitle = document.querySelector('.hero-title');
+        const heroSub = document.querySelector('.hero-sub');
+        const heroScroll = document.querySelector('.hero-scroll');
+        const heroDoodle = document.querySelector('.hero-doodle-line');
+        const sectionHeadings = document.querySelectorAll('.section-heading');
+        const sectionLabels = document.querySelectorAll('.section-label');
+        const timelineItems = document.querySelectorAll('.tl-item');
+        const letterEl = document.querySelector('.letter');
+        const polaroids = document.querySelectorAll('.polaroid');
 
-        window.addEventListener('scroll', () => {
-            const pct = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
-            scrollHeart.classList.toggle('visible', window.scrollY > 200);
+        let ticking = false;
+
+        function onScroll() {
+            const scrollY = window.scrollY;
+            const vh = window.innerHeight;
+            const pct = Math.min(scrollY / (document.documentElement.scrollHeight - vh), 1);
+
+            // Scroll heart fill
+            scrollHeart.classList.toggle('visible', scrollY > 200);
             heartRect.setAttribute('y', 24 - (pct * 24));
 
-            // Subtle rotation on divider SVGs
-            dividers.forEach(d => {
-                const rect = d.getBoundingClientRect();
-                if (rect.top < innerHeight && rect.bottom > 0) {
-                    const progress = (innerHeight - rect.top) / (innerHeight + rect.height);
-                    const svg = d.querySelector('svg');
-                    if (svg) svg.style.transform = `rotate(${(progress - 0.5) * 8}deg)`;
+            // Hero parallax – elements move at different speeds
+            if (scrollY < vh * 1.5) {
+                const heroProgress = scrollY / vh;
+                if (heroFlowerEl) heroFlowerEl.style.transform = `translateY(${heroProgress * -30}px) rotate(${heroProgress * -3}deg)`;
+                if (heroTitle) heroTitle.style.transform = `translateY(${heroProgress * 40}px)`;
+                if (heroSub) heroSub.style.transform = `translateY(${heroProgress * 25}px)`;
+                if (heroScroll) heroScroll.style.opacity = Math.max(0, 1 - heroProgress * 2.5);
+                if (heroDoodle) heroDoodle.style.transform = `translateY(${heroProgress * 30}px)`;
+            }
+
+            // Section headings – subtle float up as they come into view
+            sectionHeadings.forEach(h => {
+                const rect = h.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    const shift = (1 - progress) * 20;
+                    h.style.transform = `translateY(${shift}px)`;
                 }
             });
+
+            // Section labels – slightly different speed than headings
+            sectionLabels.forEach(l => {
+                const rect = l.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    l.style.transform = `translateY(${(1 - progress) * 12}px)`;
+                }
+            });
+
+            // Dividers – subtle rotation
+            dividers.forEach(d => {
+                const rect = d.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    const svg = d.querySelector('svg');
+                    if (svg) svg.style.transform = `rotate(${(progress - 0.5) * 8}deg) translateY(${(progress - 0.5) * -10}px)`;
+                }
+            });
+
+            // Timeline items – staggered subtle shift
+            timelineItems.forEach((item, i) => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    const shift = (1 - progress) * 15;
+                    item.style.transform = `translateY(${shift}px)`;
+                }
+            });
+
+            // Polaroids – subtle individual float (skip if hovered)
+            polaroids.forEach((p, i) => {
+                if (p.matches(':hover')) return;
+                const rect = p.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    const baseRotations = [-3, 1.5, -1, 2.5, -2, 1];
+                    const rot = baseRotations[i] || 0;
+                    const shift = (1 - progress) * (8 + (i % 3) * 4);
+                    p.style.transform = `rotate(${rot}deg) translateY(${shift}px)`;
+                }
+            });
+
+            // Letter – gentle rise
+            if (letterEl) {
+                const rect = letterEl.getBoundingClientRect();
+                if (rect.top < vh && rect.bottom > 0) {
+                    const progress = (vh - rect.top) / (vh + rect.height);
+                    letterEl.style.transform = `translateY(${(1 - progress) * 12}px)`;
+                }
+            }
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(onScroll);
+                ticking = true;
+            }
         }, { passive: true });
 
         /* ==== FLOWER CLICK ==== */
@@ -2874,23 +3175,135 @@
         }, { threshold: 0.3 });
         cObs.observe(document.querySelector('.counter-row'));
 
-        /* ==== MODAL ==== */
+        /* ==== MODAL WITH SWIPE NAVIGATION ==== */
         const modal = document.getElementById('modal');
         const modalPic = document.getElementById('modalPic');
         const modalCap = document.getElementById('modalCap');
+        const modalCard = document.getElementById('modalCard');
+        const modalCounter = document.getElementById('modalCounter');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+        const allPolaroids = document.querySelectorAll('.polaroid');
+        let currentPhotoIdx = 0;
 
-        document.querySelectorAll('.polaroid').forEach(p => {
+        function showPhoto(idx, direction) {
+            const p = allPolaroids[idx];
+            if (!p) return;
+
+            // Slide animation
+            if (direction) {
+                modalCard.classList.remove('slide-left', 'slide-right');
+                void modalCard.offsetHeight;
+                modalCard.classList.add(direction === 'left' ? 'slide-left' : 'slide-right');
+                setTimeout(() => modalCard.classList.remove('slide-left', 'slide-right'), 350);
+
+                // Update content at midpoint of animation
+                setTimeout(() => updateModalContent(p, idx), 140);
+            } else {
+                updateModalContent(p, idx);
+            }
+
+            currentPhotoIdx = idx;
+        }
+
+        function updateModalContent(p, idx) {
+            const img = p.querySelector('.pol-img img');
+            const svg = p.querySelector('.pol-img svg');
+            modalPic.innerHTML = '';
+            if (img) modalPic.appendChild(img.cloneNode());
+            else if (svg) { const c = svg.cloneNode(true); c.style.width = '48px'; c.style.height = '48px'; modalPic.appendChild(c); }
+            modalCap.textContent = p.dataset.caption;
+            modalCounter.textContent = (idx + 1) + ' / ' + allPolaroids.length;
+        }
+
+        allPolaroids.forEach((p, i) => {
             p.addEventListener('click', () => {
-                const img = p.querySelector('.pol-img img');
-                const svg = p.querySelector('.pol-img svg');
-                modalPic.innerHTML = '';
-                if (img) modalPic.appendChild(img.cloneNode());
-                else if (svg) { const c = svg.cloneNode(true); c.style.width = '48px'; c.style.height = '48px'; modalPic.appendChild(c); }
-                modalCap.textContent = p.dataset.caption;
+                currentPhotoIdx = i;
+                showPhoto(i);
                 modal.classList.add('active');
             });
         });
-        modal.addEventListener('click', () => modal.classList.remove('active'));
+
+        // Nav buttons
+        modalPrev.addEventListener('click', e => {
+            e.stopPropagation();
+            const newIdx = (currentPhotoIdx - 1 + allPolaroids.length) % allPolaroids.length;
+            showPhoto(newIdx, 'right');
+        });
+
+        modalNext.addEventListener('click', e => {
+            e.stopPropagation();
+            const newIdx = (currentPhotoIdx + 1) % allPolaroids.length;
+            showPhoto(newIdx, 'left');
+        });
+
+        // Close on background click (not on card or nav)
+        modal.addEventListener('click', e => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+        modalCard.addEventListener('click', e => {
+            // Close only if clicking on the card itself (not nav buttons)
+            if (!e.target.closest('.modal-nav')) modal.classList.remove('active');
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', e => {
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const newIdx = (currentPhotoIdx - 1 + allPolaroids.length) % allPolaroids.length;
+                showPhoto(newIdx, 'right');
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                const newIdx = (currentPhotoIdx + 1) % allPolaroids.length;
+                showPhoto(newIdx, 'left');
+            } else if (e.key === 'Escape') {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Swipe gesture support
+        (function initModalSwipe() {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let swiping = false;
+
+            modal.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                swiping = true;
+            }, { passive: true });
+
+            modal.addEventListener('touchmove', e => {
+                if (!swiping) return;
+                const diffX = e.touches[0].clientX - touchStartX;
+                const diffY = e.touches[0].clientY - touchStartY;
+                // Only horizontal swipe (not vertical scroll)
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            modal.addEventListener('touchend', e => {
+                if (!swiping) return;
+                swiping = false;
+                const diffX = e.changedTouches[0].clientX - touchStartX;
+                const diffY = e.changedTouches[0].clientY - touchStartY;
+
+                // Require minimum 50px horizontal swipe, and more horizontal than vertical
+                if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX < 0) {
+                        // Swiped left → next
+                        const newIdx = (currentPhotoIdx + 1) % allPolaroids.length;
+                        showPhoto(newIdx, 'left');
+                    } else {
+                        // Swiped right → prev
+                        const newIdx = (currentPhotoIdx - 1 + allPolaroids.length) % allPolaroids.length;
+                        showPhoto(newIdx, 'right');
+                    }
+                }
+            }, { passive: true });
+        })();
 
         /* ==== LOVE REASONS + SECRET ==== */
         (function() {
