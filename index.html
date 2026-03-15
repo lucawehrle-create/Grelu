@@ -431,20 +431,40 @@
             pointer-events: none; z-index: 9999;
         }
 
-        .confetti-dot {
+        /* Bloom petals float up */
+        .bloom-petal {
             position: absolute;
-            top: -12px;
+            bottom: -20px;
             opacity: 0;
-            animation: confDrop linear forwards;
         }
 
-        .conf-circle { border-radius: 50%; }
-        .conf-square { border-radius: 2px; }
-        .conf-star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        @keyframes bloomRise {
+            0% { opacity: 0; transform: translateY(0) rotate(0deg) scale(0.6); }
+            15% { opacity: 0.7; }
+            70% { opacity: 0.5; }
+            100% { opacity: 0; transform: translateY(-110vh) rotate(var(--rot, 200deg)) scale(0.3); }
+        }
 
-        @keyframes confDrop {
-            0% { opacity: 0.8; transform: translateY(0) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(110vh) rotate(600deg); }
+        @keyframes bloomSway {
+            0%, 100% { margin-left: 0; }
+            33% { margin-left: var(--sway, 40px); }
+            66% { margin-left: calc(var(--sway, 40px) * -0.6); }
+        }
+
+        /* Golden sparkles */
+        .bloom-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--mustard);
+            opacity: 0;
+        }
+
+        @keyframes sparkleUp {
+            0% { opacity: 0; transform: translateY(0) scale(0); }
+            20% { opacity: 0.8; transform: translateY(-10vh) scale(1); }
+            100% { opacity: 0; transform: translateY(-80vh) scale(0); }
         }
 
         /* ---- SECTIONS ---- */
@@ -3644,19 +3664,43 @@
         function launchConfetti() {
             const wrap = document.getElementById('confetti');
             if (!wrap) return;
-            const shapes = ['conf-circle', 'conf-square', 'conf-star'];
-            for (let i = 0; i < 100; i++) {
-                const d = document.createElement('div');
-                d.className = 'confetti-dot ' + shapes[Math.floor(Math.random() * shapes.length)];
-                d.style.left = Math.random() * 100 + '%';
-                const size = Math.random() * 8 + 4;
-                d.style.width = d.style.height = size + 'px';
-                d.style.background = palette[Math.floor(Math.random() * palette.length)];
-                d.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                d.style.animationDelay = (Math.random() * 1.8) + 's';
-                wrap.appendChild(d);
+            const petalColors = ['#D98BA5', '#E3A832', '#C4553F', '#9B7EC8', '#C28A8A', '#7B9B68'];
+
+            // Floating petals rising upward
+            for (let i = 0; i < 35; i++) {
+                const p = document.createElement('div');
+                p.className = 'bloom-petal';
+                const size = 10 + Math.random() * 16;
+                const color = petalColors[Math.floor(Math.random() * petalColors.length)];
+                const rot = 120 + Math.random() * 240;
+                const sway = 20 + Math.random() * 50;
+                const dur = 4 + Math.random() * 4;
+                const swayDur = 2 + Math.random() * 3;
+                const delay = Math.random() * 2.5;
+
+                p.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none">
+                    <ellipse cx="10" cy="10" rx="8" ry="5" transform="rotate(${Math.random()*60-30} 10 10)" fill="${color}" opacity="0.6"/>
+                </svg>`;
+                p.style.left = Math.random() * 100 + '%';
+                p.style.setProperty('--rot', rot + 'deg');
+                p.style.setProperty('--sway', sway + 'px');
+                p.style.animation = `bloomRise ${dur}s ease-out ${delay}s forwards, bloomSway ${swayDur}s ease-in-out ${delay}s infinite`;
+                wrap.appendChild(p);
             }
-            setTimeout(() => wrap.remove(), 6000);
+
+            // Golden sparkles
+            for (let i = 0; i < 20; i++) {
+                const s = document.createElement('div');
+                s.className = 'bloom-sparkle';
+                const size = 2 + Math.random() * 4;
+                s.style.width = s.style.height = size + 'px';
+                s.style.left = 10 + Math.random() * 80 + '%';
+                s.style.bottom = Math.random() * 30 + '%';
+                s.style.animation = `sparkleUp ${3 + Math.random() * 3}s ease-out ${Math.random() * 2}s forwards`;
+                wrap.appendChild(s);
+            }
+
+            setTimeout(() => wrap.remove(), 9000);
         }
 
         /* ==== SCROLL REVEAL + SQUIGGLE ==== */
