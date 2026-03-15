@@ -62,7 +62,7 @@
             position: fixed;
             inset: 0;
             z-index: 999999;
-            background: radial-gradient(ellipse at 50% 40%, var(--beige-light) 0%, var(--beige) 60%, var(--beige-dark) 100%);
+            background: linear-gradient(160deg, #F5EDE3 0%, #EBE1D5 35%, #E8D8CA 65%, #F0E6DA 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -88,108 +88,122 @@
             pointer-events: none;
         }
 
-        /* Floating decorations on lock screen */
-        .lock-deco {
+        /* Floating petals */
+        .lock-petal {
             position: absolute;
             pointer-events: none;
             opacity: 0;
-            animation: lockDecoIn 1s ease forwards;
-        }
-        .lock-deco:nth-child(1) { top: 12%; left: 8%; animation-delay: 0.5s; }
-        .lock-deco:nth-child(2) { top: 18%; right: 10%; animation-delay: 0.8s; }
-        .lock-deco:nth-child(3) { bottom: 20%; left: 12%; animation-delay: 1.1s; }
-        .lock-deco:nth-child(4) { bottom: 15%; right: 8%; animation-delay: 1.4s; }
-        .lock-deco:nth-child(5) { top: 8%; left: 50%; animation-delay: 0.6s; }
-        .lock-deco:nth-child(6) { bottom: 30%; left: 5%; animation-delay: 1s; }
-        .lock-deco:nth-child(7) { top: 35%; right: 6%; animation-delay: 1.2s; }
-
-        @keyframes lockDecoIn {
-            from { opacity: 0; transform: scale(0.5) rotate(-20deg); }
-            to { opacity: 0.15; transform: scale(1) rotate(0deg); }
+            will-change: transform;
         }
 
-        .lock-deco svg {
-            animation: lockDecoFloat 6s ease-in-out infinite alternate;
+        @keyframes petalFall {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) rotate(0deg) scale(0.7);
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.35;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(100vh + 40px)) rotate(360deg) scale(0.5);
+            }
         }
-        .lock-deco:nth-child(2n) svg { animation-duration: 7s; animation-direction: alternate-reverse; }
-        .lock-deco:nth-child(3n) svg { animation-duration: 5s; }
 
-        @keyframes lockDecoFloat {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-12px) rotate(8deg); }
+        @keyframes petalSway {
+            0%, 100% { margin-left: 0; }
+            25% { margin-left: 30px; }
+            75% { margin-left: -30px; }
+        }
+
+        /* Central card */
+        .lock-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Flower centerpiece (matches hero) */
+        .lock-flower {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: lockFlowerIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+            filter: drop-shadow(0 4px 12px rgba(196, 85, 63, 0.12));
+        }
+
+        @keyframes lockFlowerIn {
+            from { opacity: 0; transform: scale(0.4) rotate(-30deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
         }
 
         .lock-title {
             font-family: var(--font-serif);
             font-style: italic;
-            font-size: clamp(1.8rem, 5vw, 2.6rem);
+            font-size: clamp(2.2rem, 6vw, 3.2rem);
             color: var(--coral);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             opacity: 0;
-            animation: fadeUp 0.7s ease 0.2s forwards;
+            animation: fadeUp 0.7s ease 0.5s forwards;
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .lock-subtitle {
             font-family: var(--font-hand);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--rose);
-            margin-bottom: 36px;
+            margin-bottom: 40px;
             text-align: center;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             opacity: 0;
-            animation: fadeUp 0.6s ease 0.4s forwards;
+            animation: fadeUp 0.6s ease 0.7s forwards;
         }
 
-        /* Padlock = heart shackle on top + rectangular body below */
+        /* Code entry card */
         .padlock {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
             opacity: 0;
-            animation: popIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+            animation: popIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
         }
 
-        /* Heart shackle - sits above the lock body */
-        .padlock-shackle {
-            width: 120px;
-            height: 90px;
-            margin-bottom: -4px;
-            filter: drop-shadow(0 2px 6px rgba(196, 85, 63, 0.12));
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Lock body - the rectangular part */
         .padlock-body {
-            background: var(--beige-light);
-            border: 3px solid var(--coral);
-            border-radius: 16px;
-            padding: 20px 20px 18px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(196, 85, 63, 0.15);
+            border-radius: 28px;
+            padding: 28px 28px 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 28px rgba(196, 85, 63, 0.1), 0 2px 6px rgba(196, 85, 63, 0.06);
-            position: relative;
+            gap: 6px;
+            box-shadow:
+                0 8px 32px rgba(196, 85, 63, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
-        /* Keyhole above the rollers */
-        .padlock-keyhole {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: -4px;
+        /* Small decorative heart above the rollers */
+        .padlock-heart {
+            margin-bottom: 4px;
+            opacity: 0.4;
         }
 
         /* Digit roller row */
         .roller-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         /* Single digit roller */
@@ -197,33 +211,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
 
         .roller-btn {
-            width: 52px;
-            height: 34px;
+            width: 56px;
+            height: 36px;
             border: none;
             background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
-            transition: background 0.15s ease, transform 0.15s ease;
+            border-radius: 12px;
+            transition: background 0.2s ease, transform 0.15s ease;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
 
         .roller-btn:active {
-            background: rgba(196, 85, 63, 0.08);
-            transform: scale(0.9);
+            background: rgba(196, 85, 63, 0.1);
+            transform: scale(0.88);
         }
 
         .roller-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             stroke-width: 2.5;
             stroke-linecap: round;
+            stroke-linejoin: round;
             fill: none;
         }
 
@@ -234,25 +249,25 @@
 
         @media (pointer: fine) {
             .roller-btn { cursor: none; }
-            .roller-btn:hover { background: rgba(196, 85, 63, 0.05); }
+            .roller-btn:hover { background: rgba(196, 85, 63, 0.06); }
         }
 
         .roller-display {
-            width: 52px;
-            height: 60px;
-            border-radius: 11px;
+            width: 56px;
+            height: 64px;
+            border-radius: 16px;
             border: 2.5px solid var(--coral);
-            background: var(--beige);
+            background: rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--font-serif);
             font-style: italic;
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             color: var(--coral);
             user-select: none;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255,255,255,0.5);
         }
 
         .roller-display.bump-up {
@@ -282,20 +297,30 @@
         /* Unlock button */
         .lock-btn {
             font-family: var(--font-hand);
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--beige);
-            background: var(--coral);
+            color: var(--beige-light);
+            background: linear-gradient(135deg, var(--coral) 0%, #D06A55 100%);
             border: none;
-            border-radius: 30px;
-            padding: 13px 48px;
-            letter-spacing: 1.5px;
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+            border-radius: 50px;
+            padding: 14px 56px;
+            letter-spacing: 2px;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
-            box-shadow: 0 4px 16px rgba(196, 85, 63, 0.25);
+            box-shadow: 0 4px 20px rgba(196, 85, 63, 0.3), 0 0 0 0 rgba(196, 85, 63, 0);
             opacity: 0;
-            animation: fadeUp 0.6s ease 1s forwards;
+            animation: fadeUp 0.6s ease 1.1s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lock-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
         }
 
         .lock-btn:active { transform: scale(0.95); }
@@ -304,7 +329,7 @@
             .lock-btn { cursor: none; }
             .lock-btn:hover {
                 transform: scale(1.06);
-                box-shadow: 5px 5px 0 var(--rose);
+                box-shadow: 0 6px 24px rgba(196, 85, 63, 0.35), 0 0 0 4px rgba(196, 85, 63, 0.08);
             }
         }
 
@@ -327,7 +352,7 @@
             font-family: var(--font-hand);
             font-size: 1rem;
             color: var(--coral);
-            margin-top: 24px;
+            margin-top: 28px;
             min-height: 1.4em;
             text-align: center;
             opacity: 0;
@@ -335,7 +360,27 @@
             transform: translateY(-4px);
         }
 
-        .lock-hint.visible { opacity: 0.7; transform: translateY(0); }
+        .lock-hint.visible { opacity: 0.6; transform: translateY(0); }
+
+        /* Soft radial glow behind card */
+        .lock-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(196, 85, 63, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: lockGlowPulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes lockGlowPulse {
+            0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
 
         /* Hide main content while locked */
         .app-content {
@@ -2249,18 +2294,17 @@
             .hero-title { font-size: clamp(2.8rem, 14vw, 4.5rem); }
             .hero-scroll { bottom: 28px; font-size: 0.85rem; }
 
-            /* Lock screen: bigger touch targets */
-            .roller-display { width: 52px; height: 58px; font-size: 1.9rem; border-radius: 10px; }
-            .roller-btn { width: 52px; height: 32px; }
-            .roller-btn svg { width: 16px; height: 16px; }
+            /* Lock screen */
+            .lock-flower { width: 80px; }
+            .roller-display { width: 52px; height: 58px; font-size: 1.9rem; border-radius: 12px; }
+            .roller-btn { width: 52px; height: 34px; }
             .roller-row { gap: 6px; }
-            .padlock-shackle { width: 100px; height: 76px; }
-            .padlock-body { padding: 16px 16px 14px; }
+            .padlock-body { padding: 22px 20px 18px; border-radius: 24px; }
             .lock-btn { padding: 14px 52px; font-size: 1.15rem; }
-            .lock-title { font-size: 1.6rem; }
+            .lock-title { font-size: 1.8rem; }
             .lock-subtitle { font-size: 1rem; margin-bottom: 28px; }
-            .lock-deco { display: none; }
             .lock-hint { font-size: 0.9rem; }
+            .lock-glow { width: 300px; height: 300px; }
 
             /* Counter: 2x2 grid */
             .counter-row { grid-template-columns: repeat(2, 1fr); gap: 12px 20px; max-width: 320px; margin-left: auto; margin-right: auto; }
@@ -2377,9 +2421,14 @@
             .hero-sub { font-size: 1rem; }
             .hero-flower { width: 72px; }
 
-            .roller-display { width: 46px; height: 50px; font-size: 1.7rem; }
+            .lock-flower { width: 68px; }
+            .lock-title { font-size: 1.5rem; }
+            .padlock-body { padding: 18px 14px 14px; border-radius: 20px; }
+            .roller-display { width: 46px; height: 50px; font-size: 1.7rem; border-radius: 12px; }
             .roller-btn { width: 46px; }
             .roller-row { gap: 4px; }
+            .lock-btn { padding: 12px 44px; }
+            .lock-glow { width: 240px; height: 240px; }
 
             .counter-row { grid-template-columns: repeat(2, 1fr); gap: 8px 12px; max-width: 280px; }
             .counter-num { font-size: 1.7rem; }
@@ -2613,66 +2662,67 @@
          LOCK SCREEN
          ============================================ -->
     <div class="lock-screen" id="lockScreen">
-        <!-- Floating decorative elements -->
-        <div class="lock-deco"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#D98BA5" stroke-width="1.5"/></svg></div>
-        <div class="lock-deco"><svg width="24" height="24" viewBox="0 0 36 36" fill="none"><path d="M18 3 L21 14 L32 14 L23 21 L26 32 L18 25 L10 32 L13 21 L4 14 L15 14Z" stroke="#E3A832" stroke-width="1.5"/></svg></div>
-        <div class="lock-deco"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#9B7EC8" stroke-width="1.5" stroke-dasharray="3 3"/></svg></div>
-        <div class="lock-deco"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#C4553F" stroke-width="1.5"/></svg></div>
-        <div class="lock-deco"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 9 22 9.3 16.5 14 18.2 21 12 17.3 5.8 21 7.5 14 2 9.3 9 9Z" stroke="#7B9B68" stroke-width="1.5"/></svg></div>
-        <div class="lock-deco"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="6" stroke="#6BA4C9" stroke-width="1.5"/></svg></div>
-        <div class="lock-deco"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#E3A832" stroke-width="1.5"/></svg></div>
+        <!-- Soft glow behind card -->
+        <div class="lock-glow"></div>
 
-        <div class="lock-title">für dich</div>
-        <div class="lock-subtitle">stelle den richtigen code ein</div>
+        <!-- Floating petals container (JS fills this) -->
+        <div id="lockPetals"></div>
 
-        <div class="padlock" id="padlock">
-            <!-- Heart-shaped shackle: a proper heart outline open at the bottom, two legs connect to the lock body -->
-            <svg class="padlock-shackle" viewBox="0 0 120 90" fill="none">
-                <!--
-                    This draws an upside-down heart shackle:
-                    Start at bottom-left leg (connects to lock body left edge)
-                    Go up, curve into left heart lobe, dip at center, right heart lobe, back down to right leg
-                -->
-                <path d="M28 88 L28 52 C28 32, 36 16, 48 10 C54 7, 57 7, 60 12 C63 7, 66 7, 72 10 C84 16, 92 32, 92 52 L92 88"
-                      stroke="#C4553F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <div class="lock-card">
+            <!-- Flower centerpiece (same as hero flower) -->
+            <svg class="lock-flower" viewBox="0 0 120 160" fill="none">
+                <path d="M60 160 C58 130, 55 110, 60 85" stroke="#C4553F" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M58 120 C45 112, 38 105, 42 95 C50 100, 55 108, 58 120Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+                <path d="M62 105 C75 97, 82 90, 78 80 C70 85, 65 93, 62 105Z" fill="none" stroke="#7B9B68" stroke-width="2.5"/>
+                <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(0 60 48)" fill="none" stroke="#D98BA5" stroke-width="2.5"/>
+                <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(60 60 48)" fill="none" stroke="#E3A832" stroke-width="2.5"/>
+                <ellipse cx="60" cy="48" rx="14" ry="18" transform="rotate(120 60 48)" fill="none" stroke="#9B7EC8" stroke-width="2.5"/>
+                <circle cx="60" cy="48" r="12" fill="#EBE1D5" stroke="#C4553F" stroke-width="2.5"/>
+                <circle cx="55" cy="46" r="2" fill="#C4553F"/>
+                <circle cx="65" cy="46" r="2" fill="#C4553F"/>
+                <path d="M55 52 C57 55, 63 55, 65 52" stroke="#C4553F" stroke-width="2" stroke-linecap="round" fill="none"/>
             </svg>
 
-            <div class="padlock-body">
-                <!-- Keyhole -->
-                <div class="padlock-keyhole">
-                    <svg viewBox="0 0 20 20" fill="none">
-                        <circle cx="10" cy="7" r="3.5" stroke="#C4553F" stroke-width="2"/>
-                        <path d="M10 10.5 L8 16 L12 16 Z" fill="#C4553F" opacity="0.35"/>
-                    </svg>
-                </div>
+            <div class="lock-title">für dich</div>
+            <div class="lock-subtitle">stelle den richtigen code ein</div>
 
-                <div class="roller-row" id="rollerRow">
-                    <div class="roller">
-                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
-                        <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+            <div class="padlock" id="padlock">
+                <div class="padlock-body">
+                    <!-- Small decorative heart -->
+                    <div class="padlock-heart">
+                        <svg width="18" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#C4553F" stroke-width="1.8"/>
+                        </svg>
                     </div>
-                    <div class="roller">
-                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
-                        <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
-                    </div>
-                    <div class="roller">
-                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
-                        <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
-                    </div>
-                    <div class="roller">
-                        <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
-                        <div class="roller-display">0</div>
-                        <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+
+                    <div class="roller-row" id="rollerRow">
+                        <div class="roller">
+                            <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                            <div class="roller-display">0</div>
+                            <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        </div>
+                        <div class="roller">
+                            <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                            <div class="roller-display">0</div>
+                            <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        </div>
+                        <div class="roller">
+                            <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                            <div class="roller-display">0</div>
+                            <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        </div>
+                        <div class="roller">
+                            <button class="roller-btn roller-up" aria-label="Ziffer hoch"><svg viewBox="0 0 18 18"><path d="M4 11l5-5 5 5"/></svg></button>
+                            <div class="roller-display">0</div>
+                            <button class="roller-btn roller-down" aria-label="Ziffer runter"><svg viewBox="0 0 18 18"><path d="M4 7l5 5 5-5"/></svg></button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <button class="lock-btn" id="lockBtn">öffnen</button>
-        <div class="lock-hint" id="lockHint">fast! hinweis: unser jahrestag (TTMM)</div>
+            <button class="lock-btn" id="lockBtn">öffnen</button>
+            <div class="lock-hint" id="lockHint">fast! hinweis: unser jahrestag (TTMM)</div>
+        </div>
     </div>
 
     <!-- Custom cursor (outside app-content so it works on lock screen too) -->
@@ -3355,7 +3405,7 @@
         })();
 
         /* ============================================
-           LOCK SCREEN – Heart Padlock
+           LOCK SCREEN – Flower Code Entry
            ============================================ */
         (function initLockScreen() {
             const CODE = [2, 5, 0, 4];
@@ -3366,12 +3416,42 @@
             const lockBtn = document.getElementById('lockBtn');
             const rollers = document.querySelectorAll('.roller');
             let locked = true;
-            let focusedRoller = 0; // which roller has keyboard focus
+            let focusedRoller = 0;
 
             // Prevent background scroll on touch while locked
             lockScreen.addEventListener('touchmove', e => {
                 e.preventDefault();
             }, { passive: false });
+
+            // Floating petals
+            const petalsContainer = document.getElementById('lockPetals');
+            const petalColors = ['#D98BA5', '#E3A832', '#C4553F', '#9B7EC8', '#C28A8A'];
+            function createPetal() {
+                if (!locked) return;
+                const petal = document.createElement('div');
+                petal.className = 'lock-petal';
+                const size = 8 + Math.random() * 14;
+                const color = petalColors[Math.floor(Math.random() * petalColors.length)];
+                const left = Math.random() * 100;
+                const duration = 6 + Math.random() * 6;
+                const swayDuration = 3 + Math.random() * 3;
+                petal.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="none">
+                    <ellipse cx="10" cy="10" rx="8" ry="5" transform="rotate(${Math.random()*60-30} 10 10)" fill="${color}" opacity="0.5"/>
+                </svg>`;
+                petal.style.left = left + '%';
+                petal.style.top = '-30px';
+                petal.style.animation = `petalFall ${duration}s linear forwards, petalSway ${swayDuration}s ease-in-out infinite`;
+                petalsContainer.appendChild(petal);
+                setTimeout(() => petal.remove(), duration * 1000);
+            }
+            // Initial burst of petals
+            for (let i = 0; i < 8; i++) setTimeout(() => createPetal(), i * 300);
+            // Then continuous petals
+            const petalInterval = setInterval(() => {
+                if (!locked) { clearInterval(petalInterval); return; }
+                createPetal();
+            }, 800);
+
             const values = [0, 0, 0, 0];
 
             function updateDisplay(idx) {
@@ -3462,7 +3542,9 @@
             function highlightRoller() {
                 rollers.forEach((r, i) => {
                     r.querySelector('.roller-display').style.boxShadow =
-                        i === focusedRoller ? '0 0 0 3px rgba(196, 85, 63, 0.25)' : 'none';
+                        i === focusedRoller
+                            ? '0 0 0 3px rgba(196, 85, 63, 0.2), 0 3px 10px rgba(0,0,0,0.04)'
+                            : '0 3px 10px rgba(0,0,0,0.04), inset 0 1px 2px rgba(255,255,255,0.5)';
                 });
             }
             highlightRoller();
