@@ -555,7 +555,7 @@
             font-size: clamp(3.8rem, 15vw, 8.5rem);
             font-weight: 400;
             font-style: italic;
-            line-height: 1;
+            line-height: 1.15;
             opacity: 0;
             animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
             letter-spacing: -0.02em;
@@ -736,6 +736,7 @@
             transition: transform 0.3s ease, background 0.3s ease;
             opacity: 0;
             transform: translateY(20px) scale(0.9);
+            overflow: visible;
         }
 
         .counter-item.visible {
@@ -759,7 +760,7 @@
             font-family: var(--font-serif);
             font-style: italic;
             font-size: 3.5rem;
-            line-height: 1;
+            line-height: 1.2;
         }
 
         .counter-label {
