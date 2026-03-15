@@ -2045,8 +2045,8 @@
         </svg>
     </div>
 
-    <!-- Spotify Player (off-screen, audio only) -->
-    <iframe id="spotifyIframe" style="position:fixed;bottom:0;right:0;width:80px;height:80px;opacity:0;pointer-events:none;z-index:-1" src="" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <!-- Background music -->
+    <audio id="bgMusic" src="music.mp3" preload="auto" loop></audio>
 
     <!-- Konami overlay -->
     <div class="konami-overlay" id="konamiOverlay">
@@ -2908,22 +2908,26 @@
             ov.addEventListener('click', () => ov.classList.remove('active'));
         })();
 
-        /* ==== MUSIC (Spotify) ==== */
+        /* ==== MUSIC (MP3) ==== */
         (function() {
             const btn = document.getElementById('musicBtn');
-            const iframe = document.getElementById('spotifyIframe');
-            const spotifySrc = 'https://open.spotify.com/embed/track/2qSkIjg1o9h3YT9RAgYN75?utm_source=generator&theme=0&autoplay=1';
+            const audio = document.getElementById('bgMusic');
             let playing = false;
 
             btn.addEventListener('click', () => {
-                playing = !playing;
                 if (playing) {
-                    iframe.src = spotifySrc;
-                    btn.classList.add('playing');
-                } else {
+                    audio.pause();
                     btn.classList.remove('playing');
-                    iframe.src = '';
+                } else {
+                    audio.play();
+                    btn.classList.add('playing');
                 }
+                playing = !playing;
+            });
+
+            audio.addEventListener('ended', () => {
+                btn.classList.remove('playing');
+                playing = false;
             });
         })();
 
