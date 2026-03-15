@@ -1541,6 +1541,58 @@
         .polaroid:nth-child(5)::before { background: var(--pink); transform: translateX(-50%) rotate(-3deg); }
         .polaroid:nth-child(6)::before { background: var(--lavender); transform: translateX(-50%) rotate(1deg); width: 44px; }
 
+        /* ---- PULL-TO-SURPRISE ---- */
+        .pull-surprise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 20px 24px;
+            font-family: var(--font-hand);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--rose);
+            background: linear-gradient(180deg, var(--cream) 60%, transparent);
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            opacity: 0;
+            z-index: 900;
+            pointer-events: none;
+        }
+        .pull-surprise.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .pull-surprise .pull-heart {
+            display: inline-block;
+            font-size: 1.4rem;
+            animation: heartBeat 1s ease-in-out infinite;
+            margin: 0 6px;
+        }
+
+        /* ---- SHAKE LEVEL OVERLAY ---- */
+        .shake-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            font-family: var(--font-hand);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--rose);
+            text-align: center;
+            opacity: 0;
+            z-index: 950;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .shake-overlay.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
         /* ---- COUNTER ITEM CLICK BOUNCE ---- */
         .counter-item.bounced {
             animation: counterBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2500,6 +2552,12 @@
     <!-- Idle bubble -->
     <div class="idle-bubble" id="idleBubble">hey... ich vermisse dich gerade</div>
 
+    <!-- Pull-to-surprise -->
+    <div class="pull-surprise" id="pullSurprise"><span class="pull-heart">&hearts;</span> psst... du bist das beste was mir je passiert ist <span class="pull-heart">&hearts;</span></div>
+
+    <!-- Shake overlay -->
+    <div class="shake-overlay" id="shakeOverlay"></div>
+
     </div><!-- /app-content -->
 
     <script>
@@ -3180,20 +3238,129 @@
             resetIdle();
         })();
 
-        /* ==== SHAKE DEVICE → HEARTS (mobile) ==== */
+        /* ==== SHAKE DEVICE → MULTI-LEVEL (mobile) ==== */
         (function() {
             let lastShake = 0;
+            let shakeCount = 0;
+            let shakeTimer = null;
+            const shakeOverlay = document.getElementById('shakeOverlay');
+            const shakeLevels = [
+                { threshold: 30, hearts: 15, msg: null },
+                { threshold: 45, hearts: 30, msg: 'ich spüre die liebe!', confetti: true },
+                { threshold: 60, hearts: 40, msg: 'FEUERWERK DER GEFÜHLE!', firework: true }
+            ];
+
+            function showShakeMsg(text) {
+                shakeOverlay.textContent = text;
+                shakeOverlay.classList.add('active');
+                setTimeout(() => shakeOverlay.classList.remove('active'), 2000);
+            }
+
             window.addEventListener('devicemotion', e => {
                 const acc = e.accelerationIncludingGravity;
-                if (!acc) return;
+                if (!acc || !siteUnlocked) return;
                 const force = Math.abs(acc.x) + Math.abs(acc.y) + Math.abs(acc.z);
                 if (force > 30 && Date.now() - lastShake > 2000) {
                     lastShake = Date.now();
-                    for (let i = 0; i < 20; i++) {
-                        setTimeout(() => spawnHeartRain(), i * 50);
+                    shakeCount++;
+                    clearTimeout(shakeTimer);
+                    shakeTimer = setTimeout(() => { shakeCount = 0; }, 5000);
+
+                    // Determine level based on force intensity
+                    let level = shakeLevels[0];
+                    if (force > 60) level = shakeLevels[2];
+                    else if (force > 45) level = shakeLevels[1];
+
+                    // Spawn hearts
+                    for (let i = 0; i < level.hearts; i++) {
+                        setTimeout(() => spawnHeartRain(), i * 40);
+                    }
+
+                    // Show message if applicable
+                    if (level.msg) showShakeMsg(level.msg);
+
+                    // Confetti for medium shake
+                    if (level.confetti) {
+                        for (let i = 0; i < 40; i++) {
+                            const c = document.createElement('div');
+                            c.className = 'confetti';
+                            const shapes = ['circle', 'square', 'star'];
+                            c.dataset.shape = shapes[Math.floor(Math.random() * 3)];
+                            c.style.left = Math.random() * 100 + 'vw';
+                            c.style.background = palette[Math.floor(Math.random() * palette.length)];
+                            c.style.width = c.style.height = (Math.random() * 8 + 4) + 'px';
+                            c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                            document.body.appendChild(c);
+                            setTimeout(() => c.remove(), 4000);
+                        }
+                    }
+
+                    // Firework for strong shake
+                    if (level.firework) {
+                        for (let w = 0; w < 3; w++) {
+                            setTimeout(() => {
+                                for (let i = 0; i < 28; i++) {
+                                    const p = document.createElement('div');
+                                    p.style.cssText = `position:fixed;border-radius:50%;z-index:999;pointer-events:none;`;
+                                    const size = Math.random() * 8 + 3;
+                                    p.style.width = p.style.height = size + 'px';
+                                    p.style.background = palette[Math.floor(Math.random() * palette.length)];
+                                    p.style.left = '50%';
+                                    p.style.top = '50%';
+                                    const angle = (i / 28) * Math.PI * 2;
+                                    const dist = Math.random() * 120 + 60;
+                                    p.style.animation = 'fwPop 0.8s ease-out forwards';
+                                    p.style.setProperty('--fx', Math.cos(angle) * dist + 'px');
+                                    p.style.setProperty('--fy', Math.sin(angle) * dist + 'px');
+                                    document.body.appendChild(p);
+                                    setTimeout(() => p.remove(), 1000);
+                                }
+                            }, w * 200);
+                        }
                     }
                 }
             });
+        })();
+
+        /* ==== PULL-TO-SURPRISE (mobile) ==== */
+        (function() {
+            const pullEl = document.getElementById('pullSurprise');
+            const messages = [
+                '<span class="pull-heart">&hearts;</span> psst... du bist das beste was mir je passiert ist <span class="pull-heart">&hearts;</span>',
+                '<span class="pull-heart">&hearts;</span> ich bin so froh dass es dich gibt <span class="pull-heart">&hearts;</span>',
+                '<span class="pull-heart">&hearts;</span> du bist mein lieblingsmensch <span class="pull-heart">&hearts;</span>',
+                '<span class="pull-heart">&hearts;</span> mit dir will ich alt werden <span class="pull-heart">&hearts;</span>',
+                '<span class="pull-heart">&hearts;</span> du machst mein leben so viel schöner <span class="pull-heart">&hearts;</span>',
+                '<span class="pull-heart">&hearts;</span> jeder tag mit dir ist ein geschenk <span class="pull-heart">&hearts;</span>'
+            ];
+            let msgIdx = 0;
+            let touchStartY = 0;
+            let pulling = false;
+            let triggered = false;
+
+            document.addEventListener('touchstart', e => {
+                if (window.scrollY <= 5 && siteUnlocked) {
+                    touchStartY = e.touches[0].clientY;
+                    pulling = true;
+                    triggered = false;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchmove', e => {
+                if (!pulling) return;
+                const diff = e.touches[0].clientY - touchStartY;
+                if (diff > 80 && !triggered) {
+                    triggered = true;
+                    pullEl.innerHTML = messages[msgIdx % messages.length];
+                    msgIdx++;
+                    pullEl.classList.add('active');
+                    setTimeout(() => pullEl.classList.remove('active'), 3000);
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => {
+                pulling = false;
+            }, { passive: true });
         })();
 
     })();
