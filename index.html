@@ -2918,11 +2918,16 @@
                 if (playing) {
                     audio.pause();
                     btn.classList.remove('playing');
+                    playing = false;
                 } else {
-                    audio.play();
-                    btn.classList.add('playing');
+                    audio.play().then(() => {
+                        btn.classList.add('playing');
+                        playing = true;
+                    }).catch(err => {
+                        console.warn('Music playback failed:', err);
+                        playing = false;
+                    });
                 }
-                playing = !playing;
             });
 
             audio.addEventListener('ended', () => {
