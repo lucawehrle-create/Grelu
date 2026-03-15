@@ -2045,8 +2045,8 @@
         </svg>
     </div>
 
-    <!-- Spotify Player (hidden, auto-plays via embed) -->
-    <iframe id="spotifyIframe" style="display:none" src="" width="0" height="0" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <!-- Spotify Player (off-screen, audio only) -->
+    <iframe id="spotifyIframe" style="position:fixed;bottom:0;right:0;width:80px;height:80px;opacity:0;pointer-events:none;z-index:-1" src="" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
     <!-- Konami overlay -->
     <div class="konami-overlay" id="konamiOverlay">
@@ -2912,7 +2912,7 @@
         (function() {
             const btn = document.getElementById('musicBtn');
             const iframe = document.getElementById('spotifyIframe');
-            const spotifySrc = 'https://open.spotify.com/embed/track/2qSkIjg1o9h3YT9RAgYN75?utm_source=generator&theme=0';
+            const spotifySrc = 'https://open.spotify.com/embed/track/2qSkIjg1o9h3YT9RAgYN75?utm_source=generator&theme=0&autoplay=1';
             let playing = false;
 
             btn.addEventListener('click', () => {
