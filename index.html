@@ -3746,14 +3746,24 @@
 
         /* ==== COUNTDOWN TO NEXT ANNIVERSARY ==== */
         (function() {
-            const target = new Date(2026, 3, 25); // 25. April 2026 (month 0-indexed)
+            const startYear = 2024; // Relationship started April 25, 2024
             const dEl = document.getElementById('cdDays');
             const hEl = document.getElementById('cdHours');
             const mEl = document.getElementById('cdMins');
             const sEl = document.getElementById('cdSecs');
+            const labelEl = document.querySelector('.countdown-label');
             if (!dEl) return;
 
             let prevVals = { d: -1, h: -1, m: -1, s: -1 };
+
+            function getNextAnniversary() {
+                const now = new Date();
+                const thisYear = now.getFullYear();
+                let next = new Date(thisYear, 3, 25); // April 25 this year
+                if (now >= next) next = new Date(thisYear + 1, 3, 25); // next year
+                const nth = next.getFullYear() - startYear;
+                return { date: next, nth: nth };
+            }
 
             function tickEl(el, val) {
                 el.classList.remove('tick');
@@ -3763,6 +3773,9 @@
             }
 
             function update() {
+                const { date: target, nth } = getNextAnniversary();
+                if (labelEl) labelEl.textContent = 'bis zu unserem ' + nth + '. jahrestag';
+
                 const now = new Date();
                 const diff = target - now;
 
