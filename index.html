@@ -6,11 +6,14 @@
     <title>GreLu</title>
     <meta name="description" content="Happy 2. Jahrestag, Greta. Eine Webseite nur für dich.">
     <meta name="theme-color" content="#C4553F">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='%23C4553F'/></svg>">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="180x180" href="icon-180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="GreLu">
-    <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1375,111 +1378,154 @@
            ============================================ */
         /* Envelope wrapper */
         .envelope-wrap {
-            max-width: 600px;
+            max-width: 560px;
             margin: 0 auto;
-            perspective: 1200px;
+            perspective: 1600px;
         }
 
         .envelope {
             position: relative;
             -webkit-tap-highlight-color: transparent;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @media (pointer: fine) { .envelope { cursor: none; } }
 
-        /* === ENVELOPE POCKET === */
+        /* === ENVELOPE POCKET (back panel) === */
         .envelope-pocket {
             position: relative;
-            background: linear-gradient(175deg, #E2D1BD 0%, #D9C6B0 100%);
-            border: 3px solid var(--coral);
-            border-radius: 6px 6px 12px 12px;
-            height: 240px;
+            background:
+                linear-gradient(175deg, #E8D7BE 0%, #D9C6A9 100%);
+            border: 2.5px solid #B8864E;
+            border-radius: 4px 4px 10px 10px;
+            height: 260px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08), 4px 4px 0 rgba(196, 85, 63, 0.1);
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.1),
+                0 2px 6px rgba(0,0,0,0.05),
+                inset 0 -2px 6px rgba(0,0,0,0.08);
             z-index: 1;
             cursor: pointer;
-            transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
-                        opacity 0.5s ease 0.6s,
-                        margin-bottom 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
-                        border-width 0.3s ease 0.7s;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
+                        opacity 0.5s ease 1s;
         }
 
         @media (pointer: fine) { .envelope-pocket { cursor: none; } }
 
-        /* Inner V-fold lines */
+        /* Address lines on envelope front */
         .envelope-pocket::before {
             content: '';
             position: absolute;
-            inset: 0;
+            top: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55%;
+            height: 3px;
+            background: rgba(120, 85, 50, 0.2);
+            border-radius: 2px;
+            box-shadow:
+                0 14px 0 rgba(120, 85, 50, 0.18),
+                0 28px 0 rgba(120, 85, 50, 0.15);
+            pointer-events: none;
+        }
+
+        /* Stamp in top-right corner */
+        .envelope-pocket::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            width: 52px;
+            height: 64px;
             background:
-                linear-gradient(to bottom right, transparent 49.5%, rgba(196,85,63,0.06) 49.5%, rgba(196,85,63,0.06) 50.5%, transparent 50.5%),
-                linear-gradient(to bottom left, transparent 49.5%, rgba(196,85,63,0.06) 49.5%, rgba(196,85,63,0.06) 50.5%, transparent 50.5%);
+                radial-gradient(circle at 50% 50%, var(--coral) 0%, var(--coral) 60%, rgba(196,85,63,0.9) 100%);
+            border: 1.5px dashed #FBF3E8;
+            outline: 2px solid var(--coral);
+            outline-offset: -5px;
+            opacity: 0.85;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             pointer-events: none;
         }
 
         .envelope.open .envelope-pocket {
-            height: 0;
+            transform: translateY(40px) scale(0.95);
             opacity: 0;
-            margin-bottom: 0;
-            border-width: 0;
             pointer-events: none;
         }
 
-        /* === FLAP (triangular, folds open via 3D) === */
+        /* === FLAP (triangular, folds open upward in 3D) === */
         .envelope-flap {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 3;
+            z-index: 5;
             transform-origin: top center;
             transform: rotateX(0deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                        opacity 0.4s ease 0.6s;
+            transform-style: preserve-3d;
+            transition: transform 0.9s cubic-bezier(0.34, 1.1, 0.64, 1);
         }
 
         .envelope-flap svg {
             width: 100%;
             display: block;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
         }
 
+        /* Flap opens upward (realistic: -180deg reveals the inside/back of flap) */
         .envelope.open .envelope-flap {
-            transform: rotateX(180deg);
-            opacity: 0;
+            transform: rotateX(-175deg) translateZ(-2px);
         }
 
         /* === HEART SEAL (wax seal) === */
         .envelope-seal {
             position: absolute;
-            top: 100px;
+            top: 92px;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 4;
-            width: 52px;
-            height: 52px;
+            transform: translateX(-50%) rotate(-3deg);
+            z-index: 6;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
-            background: radial-gradient(circle at 40% 35%, #d4604d 0%, var(--coral) 60%, #a84333 100%);
+            background:
+                radial-gradient(circle at 38% 32%, #e77160 0%, var(--coral) 55%, #8a3628 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(196, 85, 63, 0.35), inset 0 1px 2px rgba(255,255,255,0.15);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow:
+                0 4px 12px rgba(138, 54, 40, 0.45),
+                inset 0 2px 3px rgba(255,255,255,0.22),
+                inset 0 -3px 5px rgba(0,0,0,0.18);
+            transition: transform 0.5s cubic-bezier(0.6, 1.4, 0.6, 1),
                         opacity 0.3s ease;
             cursor: pointer;
+        }
+
+        /* Rough wax edge texture via pseudo-element */
+        .envelope-seal::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 20% 30%, transparent 40%, rgba(196,85,63,0.15) 50%, transparent 60%),
+                radial-gradient(circle at 80% 70%, transparent 40%, rgba(138,54,40,0.2) 50%, transparent 60%);
+            pointer-events: none;
         }
 
         @media (pointer: fine) { .envelope-seal { cursor: none; } }
 
         .envelope-seal svg {
-            width: 22px;
-            height: 22px;
-            fill: var(--beige);
-            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+            width: 26px;
+            height: 26px;
+            fill: #FBF3E8;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+            z-index: 1;
+            position: relative;
         }
 
         .envelope.open .envelope-seal {
-            transform: translateX(-50%) scale(0) rotate(360deg);
+            transform: translateX(-50%) scale(0.3) rotate(-25deg);
             opacity: 0;
             pointer-events: none;
         }
@@ -1487,81 +1533,108 @@
         /* === CTA text === */
         .envelope-cta {
             position: absolute;
-            bottom: 28px;
+            bottom: 22px;
             left: 0;
             right: 0;
             font-family: var(--font-hand);
-            font-size: 1.05rem;
-            color: var(--coral);
+            font-size: 1rem;
+            color: #8A5E3A;
             text-align: center;
-            opacity: 0.45;
+            opacity: 0.7;
             z-index: 2;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
             letter-spacing: 0.5px;
+            pointer-events: none;
         }
 
-        .envelope:hover .envelope-cta { opacity: 0.7; }
+        .envelope:hover .envelope-cta {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
 
         .envelope.open .envelope-cta {
             opacity: 0;
-            pointer-events: none;
         }
 
-        /* === LETTER (expands naturally when envelope collapses) === */
+        /* === LETTER (slides up out of envelope) === */
         .envelope .letter {
+            position: relative;
             max-width: none;
-            margin: 0;
-            margin-top: 20px;
+            margin: 0 auto;
             max-height: 0;
             opacity: 0;
             overflow: hidden;
-            transform: translateY(20px) scale(0.97);
-            transition: max-height 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
-                        opacity 0.6s ease 0.5s,
-                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
-                        margin-top 0.7s ease 0.4s;
+            transform: translateY(40px) scale(0.96);
+            transform-origin: top center;
+            transition: max-height 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
+                        opacity 0.6s ease 0.6s,
+                        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
+                        margin-top 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
             pointer-events: none;
+            z-index: 2;
+            margin-top: 0;
         }
 
         .envelope.open .letter {
             max-height: 3000px;
             opacity: 1;
             transform: translateY(0) scale(1);
-            margin-top: 0;
+            margin-top: 36px;
             overflow: visible;
             pointer-events: auto;
         }
 
         .letter {
-            padding: 52px 44px;
+            padding: 64px 52px 48px;
             background:
                 repeating-linear-gradient(
                     to bottom,
                     transparent,
-                    transparent 31px,
-                    rgba(196, 85, 63, 0.06) 31px,
-                    rgba(196, 85, 63, 0.06) 32px
+                    transparent 33px,
+                    rgba(155, 105, 75, 0.08) 33px,
+                    rgba(155, 105, 75, 0.08) 34px
                 ),
-                linear-gradient(170deg, var(--beige-light) 0%, #F5EDE2 100%);
-            border: 3px solid var(--coral);
-            border-radius: 24px;
+                linear-gradient(165deg, #FDF7EC 0%, #F5EAD6 100%);
+            border: 1px solid rgba(180, 130, 80, 0.25);
+            border-radius: 2px;
             position: relative;
-            box-shadow: 8px 8px 0 rgba(196, 85, 63, 0.15), 0 12px 40px rgba(0,0,0,0.06);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 20px 50px rgba(100, 70, 40, 0.18),
+                0 40px 80px rgba(100, 70, 40, 0.1),
+                inset 0 0 60px rgba(180, 130, 80, 0.06);
         }
 
+        /* Left margin guide line on the letter paper */
         .letter::after {
             content: '';
             position: absolute;
-            top: 44px;
-            left: 38px;
-            bottom: 24px;
-            width: 1.5px;
-            background: rgba(196, 85, 63, 0.08);
+            top: 56px;
+            left: 46px;
+            bottom: 32px;
+            width: 1px;
+            background: rgba(196, 85, 63, 0.35);
             border-radius: 1px;
         }
 
+        /* Subtle fold line across middle (like a real folded letter) */
+        .letter::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent 0%, rgba(120, 85, 50, 0.08) 20%, rgba(120, 85, 50, 0.08) 80%, transparent 100%);
+            pointer-events: none;
+        }
+
         .envelope.open .letter:hover {
-            box-shadow: 10px 10px 0 rgba(196, 85, 63, 0.22), 0 16px 50px rgba(0,0,0,0.08);
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.05),
+                0 24px 60px rgba(100, 70, 40, 0.22),
+                0 48px 100px rgba(100, 70, 40, 0.12),
+                inset 0 0 60px rgba(180, 130, 80, 0.06);
         }
 
         .letter-doodle {
@@ -1581,30 +1654,35 @@
         .letter-greeting {
             font-family: var(--font-serif);
             font-style: italic;
-            font-size: 2rem;
-            margin-bottom: 28px;
-            color: var(--coral);
+            font-size: 1.85rem;
+            margin-bottom: 26px;
+            color: #8A4231;
+            letter-spacing: 0.5px;
         }
 
         .letter-body {
             font-family: var(--font-body);
             font-size: 1.02rem;
             line-height: 2;
-            opacity: 0.65;
+            color: #5A3E2B;
+            opacity: 0.88;
         }
 
-        .letter-body p { margin-bottom: 16px; }
+        .letter-body p { margin-bottom: 18px; }
+        .letter-body p:last-child { margin-bottom: 0; }
 
         .signature {
             font-family: var(--font-hand);
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             font-weight: 700;
+            color: #8A4231;
             text-align: right;
-            margin-top: 32px;
+            margin-top: 36px;
             user-select: none;
             transition: transform 0.3s ease, color 0.3s ease;
             display: inline-block;
             float: right;
+            transform: rotate(-2deg);
         }
 
         .signature:hover {
@@ -2485,12 +2563,15 @@
             .love-blob:nth-child(10) { grid-column: 3 / 5; }
 
             /* Letter & Envelope */
-            .envelope-pocket { height: 200px; }
-            .envelope-seal { width: 44px; height: 44px; top: 85px; }
-            .envelope-seal svg { width: 18px; height: 18px; }
-            .envelope-cta { font-size: 0.95rem; }
-            .letter { padding: 36px 28px; }
-            .letter::after { left: 22px; top: 28px; }
+            .envelope-pocket { height: 220px; }
+            .envelope-pocket::after { width: 44px; height: 54px; top: 14px; right: 14px; }
+            .envelope-pocket::before { top: 120px; }
+            .envelope-seal { width: 50px; height: 50px; top: 78px; }
+            .envelope-seal svg { width: 22px; height: 22px; }
+            .envelope-cta { font-size: 0.92rem; }
+            .envelope.open .letter { margin-top: 30px; }
+            .letter { padding: 48px 34px 36px; }
+            .letter::after { left: 28px; top: 40px; }
             .letter-flower-tr { width: 40px; height: 40px; top: -14px; right: -10px; }
             .letter-flower-bl { width: 36px; height: 36px; bottom: -14px; left: -10px; }
 
@@ -2574,12 +2655,15 @@
             .love-text { font-size: 0.85rem; }
 
             /* Letter & Envelope */
-            .envelope-pocket { height: 180px; }
-            .envelope-seal { width: 40px; height: 40px; top: 75px; }
-            .envelope-seal svg { width: 16px; height: 16px; }
-            .envelope-cta { font-size: 0.9rem; bottom: 20px; }
-            .letter { padding: 28px 22px; border-radius: 18px; }
-            .letter::after { left: 16px; top: 20px; }
+            .envelope-pocket { height: 190px; }
+            .envelope-pocket::after { width: 40px; height: 48px; top: 12px; right: 12px; }
+            .envelope-pocket::before { top: 100px; }
+            .envelope-seal { width: 46px; height: 46px; top: 68px; }
+            .envelope-seal svg { width: 20px; height: 20px; }
+            .envelope-cta { font-size: 0.88rem; bottom: 18px; }
+            .envelope.open .letter { margin-top: 24px; }
+            .letter { padding: 38px 26px 28px; border-radius: 2px; }
+            .letter::after { left: 22px; top: 32px; }
             .letter-greeting { font-size: 1.4rem; margin-bottom: 20px; }
             .letter-body { font-size: 0.95rem; line-height: 1.85; }
             .signature { font-size: 1.3rem; }
@@ -3521,10 +3605,19 @@
             <div class="envelope" id="envelope">
                 <!-- Flap (triangular, folds open via 3D rotateX) -->
                 <div class="envelope-flap">
-                    <svg viewBox="0 0 600 130" preserveAspectRatio="none">
-                        <!-- Flap background -->
-                        <path d="M3 0 L300 120 L597 0 L597 3 L300 123 L3 3Z" fill="#CDBA9F"/>
-                        <path d="M3 0 L300 120 L597 0" fill="#D9C6B0" stroke="#C4553F" stroke-width="3" stroke-linejoin="round"/>
+                    <svg viewBox="0 0 600 150" preserveAspectRatio="none">
+                        <!-- Shadow beneath flap edge -->
+                        <path d="M2 0 L300 138 L598 0 L598 3 L300 141 L2 3Z" fill="#A87F4A" opacity="0.25"/>
+                        <!-- Flap body with subtle gradient -->
+                        <defs>
+                            <linearGradient id="flapGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#E8D7BE"/>
+                                <stop offset="100%" stop-color="#D4BC98"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M2 0 L300 138 L598 0" fill="url(#flapGrad)" stroke="#B8864E" stroke-width="2.5" stroke-linejoin="round"/>
+                        <!-- Subtle fold highlight along center -->
+                        <path d="M300 138 L300 0" stroke="rgba(120,85,50,0.1)" stroke-width="1" stroke-dasharray="2 3"/>
                     </svg>
                 </div>
 
@@ -3581,7 +3674,7 @@
                         <p>Ich liebe dich.</p>
                     </div>
                     <!-- Easter Egg: 3x Klick = Herz-Feuerwerk -->
-                    <div class="signature" id="sig">in liebe, luca</div>
+                    <div class="signature" id="sig">Dein Luca</div>
                     <div style="clear:both"></div>
                 </div>
             </div>
