@@ -940,52 +940,95 @@
             animation: heartBeat 1.8s ease-in-out infinite;
         }
 
-        /* Timeline card */
+        /* Timeline card — journal/scrapbook feel */
         .tl-item {
+            --accent: var(--coral);
+            --accent-rgb: 196, 85, 63;
+            --rotation: -0.5deg;
             position: relative;
-            margin-bottom: 64px;
-            padding: 36px 36px 32px 36px;
-            background: linear-gradient(145deg, var(--beige-light) 0%, #F5EDE2 100%);
-            border: 2.5px solid var(--coral);
-            border-radius: 22px;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
-            overflow: hidden;
+            margin-bottom: 80px;
+            padding: 44px 34px 34px 34px;
+            background:
+                radial-gradient(ellipse at top right, rgba(var(--accent-rgb), 0.05) 0%, transparent 55%),
+                linear-gradient(145deg, #FBF5EC 0%, #F2E9DA 100%);
+            border: 1.5px solid rgba(var(--accent-rgb), 0.35);
+            border-radius: 3px;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease;
+            transform: rotate(var(--rotation));
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 6px 16px rgba(var(--accent-rgb), 0.06);
         }
 
-        .tl-item:nth-child(2) { border-color: var(--rose); }
-        .tl-item:nth-child(3) { border-color: var(--warm); }
-        .tl-item:nth-child(4) { border-color: #9B7EC8; }
-        .tl-item:nth-child(5) { border-color: var(--coral); }
-        .tl-item:nth-child(6) { border-color: #7B9B68; }
+        .tl-item:nth-child(1) { --accent: var(--coral); --accent-rgb: 196, 85, 63; --rotation: -0.5deg; }
+        .tl-item:nth-child(2) { --accent: var(--rose); --accent-rgb: 194, 138, 138; --rotation: 0.6deg; }
+        .tl-item:nth-child(3) { --accent: var(--warm); --accent-rgb: 201, 168, 122; --rotation: -0.4deg; }
+        .tl-item:nth-child(4) { --accent: #9B7EC8; --accent-rgb: 155, 126, 200; --rotation: 0.5deg; }
+        .tl-item:nth-child(5) { --accent: var(--coral); --accent-rgb: 196, 85, 63; --rotation: -0.3deg; }
+        .tl-item:nth-child(6) { --accent: #7B9B68; --accent-rgb: 123, 155, 104; --rotation: 0.4deg; }
 
-        /* Chapter watermark number */
+        /* Washi tape strip at top */
+        .tl-item::before {
+            content: '';
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 96px;
+            height: 20px;
+            background:
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(var(--accent-rgb), 0.32),
+                    rgba(var(--accent-rgb), 0.32) 6px,
+                    rgba(var(--accent-rgb), 0.22) 6px,
+                    rgba(var(--accent-rgb), 0.22) 12px
+                );
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Chapter number as a little stamp */
         .tl-item::after {
             content: attr(data-chapter);
             position: absolute;
-            top: -8px;
-            right: 16px;
+            top: 16px;
+            right: 18px;
             font-family: var(--font-serif);
             font-style: italic;
-            font-size: 6rem;
-            line-height: 1;
-            opacity: 0.04;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: rgba(var(--accent-rgb), 0.75);
+            letter-spacing: 1px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px dashed rgba(var(--accent-rgb), 0.45);
+            border-radius: 50%;
+            background: rgba(255, 250, 240, 0.5);
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: transform 0.4s ease, opacity 0.4s ease;
         }
 
-        .tl-item:hover::after { opacity: 0.08; }
+        /* Override .reveal transforms to keep the base rotation */
+        .tl-item.reveal { transform: translateY(30px) rotate(var(--rotation)); }
+        .tl-item.reveal.visible { transform: translateY(0) rotate(var(--rotation)); }
 
-        /* Hover effect */
-        .tl-item:hover {
-            transform: translateY(-4px) translateX(4px);
+        /* Hover: straighten + lift */
+        .tl-item:hover,
+        .tl-item.reveal.visible:hover {
+            transform: rotate(0deg) translateY(-5px);
+            box-shadow:
+                0 3px 6px rgba(0,0,0,0.06),
+                0 14px 32px rgba(var(--accent-rgb), 0.14);
         }
 
-        .tl-item:nth-child(1):hover { box-shadow: 6px 6px 0 var(--coral), 0 12px 32px rgba(196,85,63,0.08); }
-        .tl-item:nth-child(2):hover { box-shadow: 6px 6px 0 var(--rose), 0 12px 32px rgba(194,138,138,0.08); }
-        .tl-item:nth-child(3):hover { box-shadow: 6px 6px 0 var(--warm), 0 12px 32px rgba(201,168,122,0.08); }
-        .tl-item:nth-child(4):hover { box-shadow: 6px 6px 0 #9B7EC8, 0 12px 32px rgba(155,126,200,0.08); }
-        .tl-item:nth-child(5):hover { box-shadow: 6px 6px 0 var(--coral), 0 12px 32px rgba(196,85,63,0.08); }
-        .tl-item:nth-child(6):hover { box-shadow: 6px 6px 0 #7B9B68, 0 12px 32px rgba(123,155,104,0.08); }
+        .tl-item:hover::after {
+            transform: rotate(-8deg) scale(1.05);
+        }
 
         /* Icon dot on timeline (replaces plain dot) */
         .tl-icon {
@@ -1014,18 +1057,8 @@
             fill: none;
         }
 
-        .tl-item:nth-child(1) .tl-icon { border-color: var(--coral); }
-        .tl-item:nth-child(1) .tl-icon svg { stroke: var(--coral); }
-        .tl-item:nth-child(2) .tl-icon { border-color: var(--rose); }
-        .tl-item:nth-child(2) .tl-icon svg { stroke: var(--rose); }
-        .tl-item:nth-child(3) .tl-icon { border-color: var(--warm); }
-        .tl-item:nth-child(3) .tl-icon svg { stroke: var(--warm); }
-        .tl-item:nth-child(4) .tl-icon { border-color: #9B7EC8; }
-        .tl-item:nth-child(4) .tl-icon svg { stroke: #9B7EC8; }
-        .tl-item:nth-child(5) .tl-icon { border-color: var(--coral); }
-        .tl-item:nth-child(5) .tl-icon svg { stroke: var(--coral); }
-        .tl-item:nth-child(6) .tl-icon { border-color: #7B9B68; }
-        .tl-item:nth-child(6) .tl-icon svg { stroke: #7B9B68; }
+        .tl-item .tl-icon { border-color: var(--accent); }
+        .tl-item .tl-icon svg { stroke: var(--accent); }
 
         .tl-item:hover .tl-icon {
             transform: scale(1.15) rotate(8deg);
@@ -1042,53 +1075,24 @@
             opacity: 0.15;
         }
 
-        .tl-item:nth-child(1) .tl-connector { background: var(--coral); }
-        .tl-item:nth-child(2) .tl-connector { background: var(--rose); }
-        .tl-item:nth-child(3) .tl-connector { background: var(--warm); }
-        .tl-item:nth-child(4) .tl-connector { background: #9B7EC8; }
-        .tl-item:nth-child(5) .tl-connector { background: var(--coral); }
-        .tl-item:nth-child(6) .tl-connector { background: #7B9B68; }
+        .tl-item .tl-connector { background: var(--accent); }
 
-        /* Date badge */
+        /* Date — handwritten, underlined */
         .tl-date {
             font-family: var(--font-hand);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 700;
             display: inline-block;
-            padding: 3px 14px;
-            border-radius: 20px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
+            color: var(--accent);
+            padding-bottom: 4px;
+            border-bottom: 2px solid rgba(var(--accent-rgb), 0.4);
+            transition: border-color 0.3s ease;
         }
 
-        .tl-item:nth-child(1) .tl-date {
-            background: rgba(196, 85, 63, 0.08);
-            color: var(--coral);
-        }
-
-        .tl-item:nth-child(2) .tl-date {
-            background: rgba(194, 138, 138, 0.1);
-            color: var(--rose);
-        }
-
-        .tl-item:nth-child(3) .tl-date {
-            background: rgba(201, 168, 122, 0.12);
-            color: var(--warm);
-        }
-
-        .tl-item:nth-child(4) .tl-date {
-            background: rgba(155, 126, 200, 0.1);
-            color: #9B7EC8;
-        }
-
-        .tl-item:nth-child(5) .tl-date {
-            background: rgba(196, 85, 63, 0.08);
-            color: var(--coral);
-        }
-
-        .tl-item:nth-child(6) .tl-date {
-            background: rgba(123, 155, 104, 0.1);
-            color: #7B9B68;
+        .tl-item:hover .tl-date {
+            border-bottom-color: var(--accent);
         }
 
         .tl-title {
@@ -1103,20 +1107,24 @@
             font-family: var(--font-body);
             font-size: 0.95rem;
             line-height: 1.8;
-            opacity: 0.65;
+            color: #5A4A3A;
+            opacity: 0.82;
         }
 
-        /* Small doodle in card corner */
+        /* Doodle in bottom-right corner — more visible now */
         .tl-doodle {
             position: absolute;
-            bottom: 12px;
-            right: 16px;
-            opacity: 0.08;
+            bottom: 14px;
+            right: 18px;
+            opacity: 0.3;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease, transform 0.5s ease;
         }
 
-        .tl-item:hover .tl-doodle { opacity: 0.15; }
+        .tl-item:hover .tl-doodle {
+            opacity: 0.55;
+            transform: rotate(-8deg) scale(1.1);
+        }
 
         /* ============================================
            POLAROIDS
@@ -2380,7 +2388,7 @@
             }
 
             .tl-item:active {
-                transform: translateY(-3px) !important;
+                transform: rotate(0deg) translateY(-3px) !important;
             }
 
             .love-blob:active {
@@ -2412,8 +2420,9 @@
                 transform: scale(1.12);
             }
 
-            /* Disable hover-only effects */
-            .tl-item:hover { transform: none; }
+            /* Disable hover-only effects (keep base rotation) */
+            .tl-item:hover,
+            .tl-item.reveal.visible:hover { transform: translateY(0) rotate(var(--rotation)); }
             .polaroid:hover { transform: none; }
             .counter-item:hover { transform: none; background: none; }
 
@@ -2447,13 +2456,14 @@
 
             /* Timeline */
             .timeline { padding-left: 52px; }
-            .tl-item { padding: 24px; margin-bottom: 48px; }
+            .tl-item { padding: 40px 22px 26px 22px; margin-bottom: 56px; }
             .tl-icon { left: -46px; width: 34px; height: 34px; }
             .tl-icon svg { width: 15px; height: 15px; }
             .tl-connector { left: -12px; width: 14px; }
             .timeline::before { left: 18px; }
             .timeline::after { left: 8px; width: 20px; height: 20px; }
-            .tl-item::after { font-size: 4.5rem; right: 10px; }
+            .tl-item::after { width: 34px; height: 34px; font-size: 0.85rem; right: 14px; top: 14px; }
+            .tl-item::before { width: 80px; height: 18px; top: -8px; }
             .tl-doodle { width: 28px; height: 28px; }
 
             /* Polaroids: 2 columns */
@@ -2539,15 +2549,16 @@
 
             /* Timeline */
             .timeline { padding-left: 46px; }
-            .tl-item { padding: 20px; margin-bottom: 40px; }
+            .tl-item { padding: 36px 18px 24px 18px; margin-bottom: 48px; }
             .tl-icon { left: -40px; width: 30px; height: 30px; border-width: 2.5px; }
             .tl-icon svg { width: 13px; height: 13px; }
             .tl-connector { left: -10px; width: 12px; }
             .timeline::before { left: 15px; width: 2.5px; }
             .timeline::after { left: 5px; width: 18px; height: 18px; bottom: -14px; }
-            .tl-item::after { font-size: 3.5rem; right: 8px; top: -4px; }
+            .tl-item::after { width: 30px; height: 30px; font-size: 0.8rem; right: 10px; top: 12px; }
+            .tl-item::before { width: 72px; height: 16px; top: -7px; }
             .tl-title { font-size: 1.4rem; }
-            .tl-date { font-size: 0.8rem; padding: 2px 10px; }
+            .tl-date { font-size: 0.82rem; }
             .tl-doodle { width: 24px; height: 24px; bottom: 8px; right: 10px; }
 
             /* Polaroids */
@@ -2650,13 +2661,14 @@
             .counter-num { font-size: 1.7rem; }
 
             .timeline { padding-left: 40px; }
-            .tl-item { padding: 16px; }
+            .tl-item { padding: 32px 14px 20px 14px; }
             .tl-icon { left: -36px; width: 26px; height: 26px; }
             .tl-icon svg { width: 11px; height: 11px; }
             .tl-connector { display: none; }
             .timeline::before { left: 13px; }
             .timeline::after { left: 3px; width: 16px; height: 16px; }
-            .tl-item::after { display: none; }
+            .tl-item::after { width: 26px; height: 26px; font-size: 0.72rem; right: 8px; top: 10px; }
+            .tl-item::before { width: 60px; height: 14px; top: -6px; }
 
             .pol-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
             .polaroid { padding: 5px 5px 24px; border-width: 2px; }
