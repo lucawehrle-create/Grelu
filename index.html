@@ -1406,8 +1406,11 @@
                 inset 0 -2px 6px rgba(0,0,0,0.08);
             z-index: 1;
             cursor: pointer;
-            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
-                        opacity 0.5s ease 1s;
+            transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s,
+                        opacity 0.5s ease 0.3s,
+                        border-width 0.5s ease 0.4s,
+                        box-shadow 0.5s ease 0.3s,
+                        margin 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
         }
 
         @media (pointer: fine) { .envelope-pocket { cursor: none; } }
@@ -1448,22 +1451,26 @@
         }
 
         .envelope.open .envelope-pocket {
-            transform: translateY(40px) scale(0.95);
+            height: 0;
             opacity: 0;
+            border-width: 0;
+            box-shadow: none;
             pointer-events: none;
+            overflow: hidden;
         }
 
         /* === FLAP (triangular, folds open upward in 3D) === */
         .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            position: relative;
             z-index: 5;
             transform-origin: top center;
             transform: rotateX(0deg);
             transform-style: preserve-3d;
-            transition: transform 0.9s cubic-bezier(0.34, 1.1, 0.64, 1);
+            transition: transform 0.9s cubic-bezier(0.34, 1.1, 0.64, 1),
+                        max-height 0.6s ease 0.5s,
+                        opacity 0.4s ease 0.6s;
+            max-height: 200px;
+            overflow: visible;
         }
 
         .envelope-flap svg {
@@ -1472,9 +1479,12 @@
             filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
         }
 
-        /* Flap opens upward (realistic: -180deg reveals the inside/back of flap) */
+        /* Flap folds open then collapses */
         .envelope.open .envelope-flap {
             transform: rotateX(-175deg) translateZ(-2px);
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
         }
 
         /* === HEART SEAL (wax seal) === */
@@ -1556,7 +1566,7 @@
             opacity: 0;
         }
 
-        /* === LETTER (slides up out of envelope) === */
+        /* === LETTER (reveals when envelope opens) === */
         .envelope .letter {
             position: relative;
             max-width: none;
@@ -1564,12 +1574,12 @@
             max-height: 0;
             opacity: 0;
             overflow: hidden;
-            transform: translateY(40px) scale(0.96);
+            transform: translateY(20px) scale(0.98);
             transform-origin: top center;
-            transition: max-height 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
-                        opacity 0.6s ease 0.6s,
-                        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
-                        margin-top 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+            transition: max-height 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
+                        opacity 0.5s ease 0.7s,
+                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s,
+                        margin-top 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
             pointer-events: none;
             z-index: 2;
             margin-top: 0;
@@ -1579,7 +1589,7 @@
             max-height: 3000px;
             opacity: 1;
             transform: translateY(0) scale(1);
-            margin-top: 36px;
+            margin-top: 16px;
             overflow: visible;
             pointer-events: auto;
         }
@@ -2569,7 +2579,7 @@
             .envelope-seal { width: 50px; height: 50px; top: 78px; }
             .envelope-seal svg { width: 22px; height: 22px; }
             .envelope-cta { font-size: 0.92rem; }
-            .envelope.open .letter { margin-top: 30px; }
+            .envelope.open .letter { margin-top: 12px; }
             .letter { padding: 48px 34px 36px; }
             .letter::after { left: 28px; top: 40px; }
             .letter-flower-tr { width: 40px; height: 40px; top: -14px; right: -10px; }
@@ -2661,7 +2671,7 @@
             .envelope-seal { width: 46px; height: 46px; top: 68px; }
             .envelope-seal svg { width: 20px; height: 20px; }
             .envelope-cta { font-size: 0.88rem; bottom: 18px; }
-            .envelope.open .letter { margin-top: 24px; }
+            .envelope.open .letter { margin-top: 10px; }
             .letter { padding: 38px 26px 28px; border-radius: 2px; }
             .letter::after { left: 22px; top: 32px; }
             .letter-greeting { font-size: 1.4rem; margin-bottom: 20px; }
